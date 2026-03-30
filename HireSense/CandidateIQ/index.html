@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CandidateIQ — Smart Interview Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+[data-theme="light"]{
+  --bg:#F0F2F5;--sidebar:#FFFFFF;--card:#FFFFFF;--surface:#F7F8FA;--surface2:#EEF0F3;
+  --border:#E3E6EC;--border2:#CDD2DB;
+  --accent:#4F6EF7;--accent-d:#3A57E8;--accent-l:#EEF1FF;--accent-m:#C7D0FB;
+  --green:#0A9272;--green-l:#E6F7F4;--green-m:#9FE0D4;
+  --red:#E0382A;--red-l:#FEF0EF;
+  --yellow:#C07A10;--yellow-l:#FEF7EC;
+  --purple:#6E40C9;--purple-l:#F1ECFE;
+  --text:#111827;--text2:#4B5563;--text3:#9CA3AF;
+  --shadow:0 1px 4px rgba(0,0,0,0.07);--shadow-md:0 4px 12px rgba(0,0,0,0.08);--shadow-lg:0 12px 32px rgba(0,0,0,0.1);
+  --overlay:rgba(17,24,39,0.4);--input-bg:#F7F8FA;--input-focus:#FFFFFF;--topbar-bg:#FFFFFF;
+}
+[data-theme="dark"]{
+  --bg:#0E1117;--sidebar:#13171F;--card:#1A1F2B;--surface:#1F2535;--surface2:#252B3B;
+  --border:#2A3145;--border2:#3A4460;
+  --accent:#6B8DF7;--accent-d:#5579F5;--accent-l:#1C2347;--accent-m:#2D3D7A;
+  --green:#0FC99A;--green-l:#0D2B24;--green-m:#0A5445;
+  --red:#F06F65;--red-l:#2C1412;
+  --yellow:#F5C24A;--yellow-l:#2B2208;
+  --purple:#A780FA;--purple-l:#1F1538;
+  --text:#E8EBF0;--text2:#8B95A8;--text3:#505A6E;
+  --shadow:0 1px 4px rgba(0,0,0,0.3);--shadow-md:0 4px 16px rgba(0,0,0,0.35);--shadow-lg:0 12px 40px rgba(0,0,0,0.5);
+  --overlay:rgba(0,0,0,0.65);--input-bg:#1F2535;--input-focus:#252B3B;--topbar-bg:#13171F;
+}
+body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;height:100vh;overflow:hidden;display:flex;font-size:14px;line-height:1.5;transition:background 0.2s,color 0.2s}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+
+/* AUTH */
+.auth-page{width:100%;height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+[data-theme="light"] .auth-page{background:linear-gradient(145deg,#EEF1FF 0%,#F7F8FF 40%,#F0F2F5 100%)}
+[data-theme="dark"] .auth-page{background:linear-gradient(145deg,#0E1117 0%,#141824 100%)}
+.auth-box{width:440px}
+.auth-logo{text-align:center;margin-bottom:30px}
+.auth-brand{display:inline-flex;align-items:center;gap:10px;margin-bottom:8px}
+.auth-icon{width:40px;height:40px;background:var(--accent);border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;box-shadow:0 4px 12px rgba(79,110,247,0.35)}us
+.auth-logo-name{font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+.auth-logo-sub{font-size:13px;color:var(--text3);font-family:'DM Mono',monospace}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px;box-shadow:var(--shadow-lg)}
+.auth-title{font-size:19px;font-weight:700;color:var(--text);margin-bottom:5px}
+.auth-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.55}
+.auth-label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:5px;margin-top:14px;text-transform:uppercase;letter-spacing:0.5px}
+.auth-input{width:100%;background:var(--input-bg);border:1.5px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;outline:none;transition:all 0.15s}
+.auth-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-m);background:var(--input-focus)}
+.auth-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:18px;transition:all 0.15s}
+.auth-btn:hover{background:var(--accent-d);transform:translateY(-1px);box-shadow:0 4px 12px rgba(79,110,247,0.4)}
+.auth-btn:disabled{background:var(--border2);color:var(--text3);cursor:not-allowed;transform:none;box-shadow:none}
+.auth-error{background:var(--red-l);border:1px solid var(--red);border-radius:8px;padding:10px 13px;font-size:13px;color:var(--red);margin-bottom:14px}
+.auth-switch{text-align:center;margin-top:18px;font-size:13px;color:var(--text2)}
+.auth-switch span{color:var(--accent);cursor:pointer;font-weight:700}
+
+/* LAYOUT */
+.sidebar{width:242px;min-width:242px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:background 0.2s}
+.sidebar-top{padding:18px 16px 14px;border-bottom:1px solid var(--border)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:33px;height:33px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;flex-shrink:0;box-shadow:0 2px 6px rgba(79,110,247,0.3)}
+.logo-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.3px}
+.logo-sub{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:1px}
+.nav{padding:10px 8px;flex:1;overflow-y:auto}
+.nav-sec{padding:10px 10px 5px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all 0.12s;border-radius:8px;margin-bottom:1px}
+.nav-item:hover{color:var(--text);background:var(--surface)}
+.nav-item.active{color:var(--accent);background:var(--accent-l);font-weight:600}
+.nav-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.user-panel{padding:10px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:9px}
+.u-avatar{width:31px;height:31px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:#fff}
+.u-name{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.u-email{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.logout-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:5px;flex-shrink:0;transition:color 0.15s;border-radius:5px}
+.logout-btn:hover{color:var(--red);background:var(--red-l)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{height:52px;background:var(--topbar-bg);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:10px;flex-shrink:0}
+.topbar-title{font-size:15px;font-weight:700;color:var(--text)}
+.topbar-sep{color:var(--border2)}
+.topbar-sub{font-size:13px;color:var(--text3)}
+.content{flex:1;overflow-y:auto;padding:20px}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:14px;font-weight:700;color:var(--text)}
+.sec-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all 0.15s;border:1px solid var(--border)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent-d)}
+.btn-ghost{background:transparent;color:var(--text2)}
+.btn-ghost:hover{background:var(--surface);color:var(--text)}
+.btn-danger{background:var(--red-l);color:var(--red);border-color:var(--red)}
+.btn-danger:hover{background:var(--red);color:#fff}
+.btn-outline{background:transparent;color:var(--accent);border-color:var(--accent-m)}
+.btn-outline:hover{background:var(--accent-l)}
+.btn-sm{padding:6px 10px;font-size:12px}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+
+/* INPUTS */
+.input{width:100%;background:var(--input-bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;outline:none;transition:all 0.15s}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-m);background:var(--input-focus)}
+.textarea{min-height:80px;resize:vertical;line-height:1.5}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-green{background:var(--green-l);color:var(--green)}
+.badge-blue{background:var(--accent-l);color:var(--accent)}
+.badge-red{background:var(--red-l);color:var(--red)}
+.badge-yellow{background:var(--yellow-l);color:var(--yellow)}
+.badge-gray{background:var(--surface2);color:var(--text2)}
+.badge-purple{background:var(--purple-l);color:var(--purple)}
+
+/* INFO BOXES */
+.info-box{background:var(--accent-l);border:1px solid var(--accent-m);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--accent);line-height:1.6}
+.warn-box{background:var(--yellow-l);border:1px solid var(--yellow);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--yellow);line-height:1.6}
+.success-box{background:var(--green-l);border:1px solid var(--green-m);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--green);line-height:1.6}
+.error-box{background:var(--red-l);border:1px solid var(--red);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--red);line-height:1.6}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+.stat-num{font-size:24px;font-weight:800;font-family:'DM Mono',monospace;margin:4px 0}
+.stat-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+
+/* CHAT */
+.chat-wrap{display:flex;flex-direction:column;height:100%;overflow:hidden}
+.chat-header{padding:14px 18px;border-bottom:1px solid var(--border);background:var(--card);flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+.chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{display:flex;gap:10px;max-width:85%}
+.msg.ai{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-avatar{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:#fff}
+.msg-ai-av{background:var(--accent)}
+.msg-user-av{background:var(--green)}
+.msg-bubble{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.65;color:var(--text)}
+.msg.user .msg-bubble{background:var(--accent);border-color:var(--accent);color:#fff}
+.msg-time{font-size:10px;color:var(--text3);margin-top:4px;font-family:'DM Mono',monospace}
+.chat-input-wrap{padding:14px 16px;border-top:1px solid var(--border);background:var(--card);flex-shrink:0}
+.chat-input-row{display:flex;gap:8px;align-items:flex-end}
+.chat-textarea{flex:1;background:var(--input-bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;outline:none;resize:none;min-height:44px;max-height:120px;line-height:1.5;transition:border-color 0.15s}
+.chat-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-m)}
+.chat-textarea:disabled{opacity:0.6;cursor:not-allowed}
+.send-btn{width:44px;height:44px;border-radius:10px;background:var(--accent);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:all 0.15s;flex-shrink:0}
+.send-btn:hover{background:var(--accent-d)}
+.send-btn:disabled{background:var(--border2);cursor:not-allowed}
+
+/* TIMER */
+.timer-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--surface);border-radius:8px;font-family:'DM Mono',monospace;font-size:13px;font-weight:500}
+.timer-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.timer-dot.warn{background:var(--yellow);animation:pulse 1s infinite}
+.timer-dot.end{background:var(--red);animation:pulse 0.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* TABLE */
+.table{width:100%;border-collapse:collapse}
+.table thead{position:sticky;top:0;z-index:1}
+.table th{text-align:left;padding:10px 13px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;border-bottom:2px solid var(--border);background:var(--surface);white-space:nowrap}
+.table td{padding:11px 13px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+.table tbody tr{transition:background 0.1s;cursor:pointer}
+.table tbody tr:hover td{background:var(--accent-l)}
+
+/* SPINNER */
+.spinner{border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* UPLOAD ZONE */
+.drop-zone{border:2px dashed var(--border2);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--surface)}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:var(--accent-l)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:var(--overlay);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;width:480px;max-width:95vw;box-shadow:var(--shadow-lg)}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px}
+
+/* THEME TOGGLE */
+.theme-toggle{background:none;border:1px solid var(--border);border-radius:7px;padding:6px 10px;cursor:pointer;font-size:13px;color:var(--text2);font-family:'Manrope',sans-serif;transition:all 0.15s}
+.theme-toggle:hover{background:var(--surface)}
+
+/* FADE */
+.fade-in{animation:fadeIn 0.2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* PHASE INDICATOR */
+.phase-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.phase-intro{background:var(--accent-l);color:var(--accent)}
+.phase-tech{background:var(--purple-l);color:var(--purple)}
+.phase-general{background:var(--yellow-l);color:var(--yellow)}
+.phase-done{background:var(--green-l);color:var(--green)}
+
+/* PROGRESS */
+.prog-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:6px}
+.prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width 1s linear}
+
+/* TYPING INDICATOR */
+.typing{display:flex;gap:4px;align-items:center;padding:8px 12px}
+.typing span{width:7px;height:7px;border-radius:50%;background:var(--text3);animation:bounce 1.2s infinite}
+.typing span:nth-child(2){animation-delay:0.2s}
+.typing span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-6px)}}
+</style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback}=React;
+
+/* ── HR EMAILS (hardcoded) ── */
+const HR_EMAILS=["mumbare.samruddhi@accrevent.com","sagar.mahajan@accrevent.com"];
+const isHR=(email)=>HR_EMAILS.includes((email||"").toLowerCase().trim());
+
+/* ── Hugging Face AI ── */
+const HF_MODEL="Qwen/Qwen3-8B";
+const HF_URL="https://api-inference.huggingface.co/models/"+HF_MODEL+"/v1/chat/completions";
+
+async function callOpenAI(messages, systemPrompt, userId){
+  const r = await fetch("http://localhost:3000/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages,
+      systemPrompt,
+      userId // ✅ pass here
+    })
+  });
+
+  const d = await r.json();
+  return d.reply;
+}
+/* ── Supabase ── */
+const CIQ_SB_URL="https://qdvdjtvscojzamaqteyq.supabase.co";
+const CIQ_SB_ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkdmRqdHZzY29qemFtYXF0ZXlxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5NDA1NzgsImV4cCI6MjA4OTUxNjU3OH0.FbsLZpvZymkpElhAMBrPnC3qHVrO0KWtRBAbETY_q9s";
+let _sb=null;
+function sb(){
+  if(_sb) return _sb;
+  _sb=window.supabase.createClient(CIQ_SB_URL,CIQ_SB_ANON);
+  return _sb;
+}
+
+/* ── PDF reader ── */
+async function pdfLib(){
+  if(window.pdfjsLib) return window.pdfjsLib;
+  await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  return window.pdfjsLib;
+}
+async function readPDF(f){
+  try{
+    const lib=await pdfLib();
+    const pdf=await lib.getDocument({data:await f.arrayBuffer()}).promise;
+    let t="";
+    for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i);const ct=await pg.getTextContent();t+=ct.items.map(x=>x.str).join(" ")+"\n";}
+    return t.trim();
+  }catch{return "";}
+}
+async function readDOCX(f){try{const r=await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()});return r.value.trim();}catch{return "";}}
+async function readFile(f){
+  const n=f.name.toLowerCase();
+  if(n.endsWith(".pdf")||f.type==="application/pdf") return readPDF(f);
+  if(n.endsWith(".docx")||n.endsWith(".doc")) return readDOCX(f);
+  return f.text();
+}
+
+/* ── Helpers ── */
+const avatarColors=["#4F6EF7","#7C3AED","#0A9272","#C07A10","#E0382A","#0891B2","#D946EF"];
+const aColor=e=>avatarColors[(e||"").charCodeAt(0)%avatarColors.length];
+const ini=e=>((e||"").split("@")[0].slice(0,2).toUpperCase());
+const fmtTime=s=>{const m=Math.floor(s/60),sec=s%60;return`${m}:${sec.toString().padStart(2,"0")}`};
+const fmtDate=d=>new Date(d).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+
+/* ══════════════════════════════════════════
+   SETUP SCREEN
+══════════════════════════════════════════ */
+function SetupScreen({onDone}){
+  const [url,setUrl]=useState(localStorage.getItem("ciq_sb_url")||"");
+  const [anon,setAnon]=useState(localStorage.getItem("ciq_sb_anon")||"");
+  const save=()=>{
+    if(!url||!anon){alert("Please enter both fields.");return;}
+    localStorage.setItem("ciq_sb_url",url);
+    localStorage.setItem("ciq_sb_anon",anon);
+    _sb=null;
+    onDone();
+  };
+  return(
+    <div className="auth-page">
+      <div className="auth-box">
+        <div className="auth-logo">
+          <div className="auth-brand">
+            <div className="auth-icon">C</div>
+            <div className="auth-logo-name">CandidateIQ</div>
+          </div>
+          <div className="auth-logo-sub">Smart Interview Portal</div>
+        </div>
+        <div className="auth-card">
+          <div className="auth-title">Connect Database</div>
+          <div className="auth-sub">One-time setup. Connect your Supabase project to get started.</div>
+          <label className="auth-label">Supabase Project URL</label>
+          <input className="auth-input" placeholder="https://xxxx.supabase.co" value={url} onChange={e=>setUrl(e.target.value)}/>
+          <label className="auth-label">Anon / Public Key</label>
+          <input className="auth-input" type="password" placeholder="eyJhbGci..." value={anon} onChange={e=>setAnon(e.target.value)}/>
+          <div className="warn-box" style={{marginTop:14,fontSize:12}}>
+            1. <a href="https://supabase.com" target="_blank" style={{color:"var(--accent)"}}>supabase.com</a> → New Project (free)<br/>
+            2. Settings → API → copy Project URL + anon key<br/>
+            3. SQL Editor → paste <code>supabase_setup.sql</code> → Run
+          </div>
+          <button className="auth-btn" onClick={save}>Save & Continue</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   AUTH SCREEN
+══════════════════════════════════════════ */
+function AuthScreen({onAuth}){
+  const [email,setEmail]=useState("");
+  const [pass,setPass]=useState("");
+  const [err,setErr]=useState("");
+  const [loading,setLoading]=useState(false);
+
+  const handle=async()=>{
+    setErr("");setLoading(true);
+    try{
+      const c=sb();
+      if(!c){setErr("Supabase not configured.");setLoading(false);return;}
+      const{data,error}=await c.auth.signInWithPassword({email,password:pass});
+      if(error) throw error;
+      if(!data.session) throw new Error("Login failed. Please try again.");
+      onAuth(data.user);
+    }catch(e){setErr(e.message||"Authentication error");}
+    setLoading(false);
+  };
+
+  return(
+    <div className="auth-page">
+      <div className="auth-box">
+        <div className="auth-logo">
+          <div className="auth-brand">
+            <div className="auth-icon">C</div>
+            <div className="auth-logo-name">CandidateIQ</div>
+          </div>
+          <div className="auth-logo-sub">Smart Interview Portal</div>
+        </div>
+        <div className="auth-card">
+          <div className="auth-title">Sign In</div>
+          <div className="auth-sub">Enter your credentials to access the portal.</div>
+          {err&&<div className="auth-error">{err}</div>}
+          <label className="auth-label">Email</label>
+          <input className="auth-input" type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handle()}/>
+          <label className="auth-label">Password</label>
+          <input className="auth-input" type="password" placeholder="••••••••" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handle()}/>
+          <button className="auth-btn" onClick={handle} disabled={loading||!email||!pass}>
+            {loading?"Signing in...":"Sign In"}
+          </button>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   HR DASHBOARD
+══════════════════════════════════════════ */
+function HRDashboard({user}){
+  const [view,setView]=useState("dashboard");
+  const [theme,setTheme]=useState(()=>localStorage.getItem("ciq_theme")||"light");
+  const [candidates,setCandidates]=useState([]);
+  const [sessions,setSessions]=useState([]);
+  const [loading,setLoading]=useState(false);
+  const [geminiKey,setGeminiKey]=useState("");
+  const [geminiInput,setGeminiInput]=useState("");
+  const [showModal,setShowModal]=useState(false);
+  const [newCand,setNewCand]=useState({name:"",email:"",password:"",resumeText:""});
+  const [createLoading,setCreateLoading]=useState(false);
+  const [selSession,setSelSession]=useState(null);
+  const resumeRef = useRef("");
+  useEffect(()=>{document.documentElement.setAttribute("data-theme",theme);localStorage.setItem("ciq_theme",theme);},[theme]);
+
+  useEffect(()=>{loadAll();},[]);
+
+  const loadAll=async()=>{
+    setLoading(true);
+    const c=sb();
+    if(!c){setLoading(false);return;}
+    // Load gemini key
+    const{data:cfg}=await c.from("config").select("value").eq("key","gemini_key").single();
+    if(cfg){setGeminiKey(cfg.value);setGeminiInput(cfg.value);}
+    // Load candidates
+    const{data:cands}=await c.from("candidates").select("*").order("created_at",{ascending:false});
+    setCandidates(cands||[]);
+    // Load sessions
+    const{data:sess}=await c.from("sessions").select("*").order("created_at",{ascending:false});
+    setSessions(sess||[]);
+    setLoading(false);
+  };
+
+  const saveGeminiKey=async()=>{
+    const c=sb();
+    await c.from("config").upsert({key:"gemini_key",value:geminiInput});
+    setGeminiKey(geminiInput);
+    alert("Gemini key saved!");
+  };
+
+  const createCandidate=async()=>{
+  const finalResume = resumeRef.current;
+	if(!newCand.name || !newCand.email || !newCand.password || !finalResume){
+	  alert("Please fill all fields and upload resume.");
+	  return;
+	}
+		setCreateLoading(true);
+		try{
+		  const c=sb();
+		  // Sign up candidate using regular signUp (no admin key needed)
+		  const { data, error } = await c.auth.signUp({
+		  email: newCand.email,
+		  password: newCand.password,
+		  options: {
+			data: { full_name: newCand.name, role: "candidate" }
+		  }
+		});
+		await c.auth.signOut();
+		  if(error) throw error;
+		  const uid=data.user?.id;
+		  if(!uid) throw new Error("Could not create account. Email may already exist.");
+		  // Save candidate record
+		  await c.from("candidates").insert({
+		  id:uid,
+		  name:newCand.name,
+		  email:newCand.email,
+		  resume_text: finalResume,
+		  created_by:user.email,
+		  created_at:new Date().toISOString()
+		});
+		  setNewCand({name:"",email:"",password:"",resumeText:""});
+		  setShowModal(false);
+		  await loadAll();
+		  alert(`✅ Candidate created!\n\nEmail: ${newCand.email}\nPassword: ${newCand.password}\n\nShare the portal link + these credentials with the candidate.`);
+		}catch(e){alert("Error: "+e.message);}
+		setCreateLoading(false);
+	  };
+
+	  const deleteCandidate=async(id,email)=>{
+		if(!window.confirm(`Delete candidate ${email}?\nThis will remove them from the portal.\n\nNote: Their Supabase auth account will remain but they won't be able to access the portal.`)) return;
+		const c=sb();
+		await c.from("sessions").delete().eq("candidate_id",id);
+		await c.from("candidates").delete().eq("id",id);
+		await loadAll();
+	  };
+
+  const downloadReport=async(session)=>{
+    if(!session.report) return alert("No report available yet.");
+    const report=session.report;
+    // Build Word doc content as HTML then convert
+    const content=`
+CandidateIQ — Interview Report
+================================
+Candidate: ${session.candidate_name||"Unknown"}
+Date: ${fmtDate(session.created_at)}
+Duration: ${Math.round((session.duration||3600)/60)} minutes
+Status: ${session.status}
+
+OVERALL RATING: ${report.rating||"N/A"}/10
+
+SUMMARY
+-------
+${report.summary||"No summary available."}
+
+THINKING CAPABILITY ANALYSIS
+-----------------------------
+${report.thinking_analysis||"N/A"}
+
+COMMUNICATION ASSESSMENT
+------------------------
+${report.communication||"N/A"}
+
+CLIENT HANDLING POTENTIAL
+-------------------------
+${report.client_handling||"N/A"}
+
+STRENGTHS
+---------
+${(report.strengths||[]).map((s,i)=>`${i+1}. ${s}`).join("\n")||"N/A"}
+
+AREAS FOR IMPROVEMENT
+---------------------
+${(report.improvements||[]).map((s,i)=>`${i+1}. ${s}`).join("\n")||"N/A"}
+
+RECOMMENDATION
+--------------
+${report.recommendation||"N/A"}
+
+FULL TRANSCRIPT
+---------------
+${(session.messages||[]).map(m=>`[${m.role==="ai"?"AI Interviewer":"Candidate"}]\n${m.content}\n`).join("\n---\n")}
+    `.trim();
+
+    const blob=new Blob([content],{type:"text/plain"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download=`CandidateIQ_Report_${(session.candidate_name||"candidate").replace(/\s+/g,"_")}_${new Date(session.created_at).toISOString().slice(0,10)}.txt`;
+    a.click();
+  };
+
+  const logout=async()=>{await sb()?.auth.signOut();window.location.reload();};
+  const completedSessions=sessions.filter(s=>s.status==="completed");
+  const activeSessions=sessions.filter(s=>s.status==="active");
+
+  return(
+    <div style={{display:"flex",height:"100vh",overflow:"hidden"}}>
+      {/* Sidebar */}
+      <div className="sidebar">
+        <div className="sidebar-top">
+          <div className="logo-mark">
+            <div className="logo-icon">C</div>
+            <div>
+              <div className="logo-name">CandidateIQ</div>
+              <div className="logo-sub">HR Portal</div>
+            </div>
+          </div>
+        </div>
+        <div className="nav">
+          <div className="nav-sec">Workspace</div>
+          <div className={`nav-item${view==="dashboard"?" active":""}`} onClick={()=>setView("dashboard")}><span className="nav-icon">⊞</span>Dashboard</div>
+          <div className={`nav-item${view==="candidates"?" active":""}`} onClick={()=>setView("candidates")}><span className="nav-icon">👥</span>Candidates</div>
+          <div className={`nav-item${view==="sessions"?" active":""}`} onClick={()=>setView("sessions")}><span className="nav-icon">💬</span>Sessions</div>
+          <div className="nav-sec">Account</div>
+          <div className={`nav-item${view==="settings"?" active":""}`} onClick={()=>setView("settings")}><span className="nav-icon">⚙</span>Settings</div>
+        </div>
+        <div className="user-panel">
+          <div className="u-avatar" style={{background:aColor(user.email)}}>{ini(user.email)}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div className="u-name">{user.user_metadata?.full_name||user.email.split("@")[0]}</div>
+            <div className="u-email">{user.email}</div>
+          </div>
+          <button className="logout-btn" onClick={logout} title="Sign out">⎋</button>
+        </div>
+      </div>
+
+      {/* Main */}
+      <div className="main">
+        <div className="topbar">
+          {view==="dashboard"&&<><div className="topbar-title">Dashboard</div><span className="topbar-sep">·</span><div className="topbar-sub">HR Overview</div></>}
+          {view==="candidates"&&<><div className="topbar-title">Candidates</div><span className="topbar-sep">·</span><div className="topbar-sub">{candidates.length} total</div></>}
+          {view==="sessions"&&<><div className="topbar-title">Sessions</div><span className="topbar-sep">·</span><div className="topbar-sub">{sessions.length} total</div></>}
+          {view==="settings"&&<><div className="topbar-title">Settings</div></>}
+          <div style={{marginLeft:"auto",display:"flex",gap:8}}>
+            <button className="theme-toggle" onClick={()=>setTheme(t=>t==="light"?"dark":"light")}>{theme==="light"?"🌙":"☀️"}</button>
+          </div>
+        </div>
+
+        <div className="content">
+          {/* DASHBOARD */}
+          {view==="dashboard"&&<div className="fade-in">
+            {!geminiKey&&<div className="warn-box" style={{marginBottom:16}}>⚠ No HuggingFace token set. <span style={{cursor:"pointer",textDecoration:"underline",fontWeight:700}} onClick={()=>setView("settings")}>Add in Settings →</span></div>}
+            <div className="stat-grid">
+              {[
+                {icon:"👥",l:"Total Candidates",v:candidates.length,c:"var(--accent)"},
+                {icon:"✅",l:"Completed Sessions",v:completedSessions.length,c:"var(--green)"},
+                {icon:"🔴",l:"Active Now",v:activeSessions.length,c:"var(--red)"},
+              ].map((s,i)=>(
+                <div key={i} className="stat-card">
+                  <div style={{fontSize:24}}>{s.icon}</div>
+                  <div className="stat-num" style={{color:s.c}}>{s.v}</div>
+                  <div className="stat-label">{s.l}</div>
+                </div>
+              ))}
+            </div>
+            <div className="card">
+              <div className="card-hdr">
+                <div className="card-title">Recent Sessions</div>
+                <button className="btn btn-ghost btn-sm" onClick={()=>setView("sessions")}>View all →</button>
+              </div>
+              {completedSessions.slice(0,5).map(s=>(
+                <div key={s.id} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
+                  <div>
+                    <div style={{fontWeight:700,fontSize:13}}>{s.candidate_name||s.candidate_email}</div>
+                    <div style={{fontSize:11,color:"var(--text3)",fontFamily:"'DM Mono',monospace"}}>{fmtDate(s.created_at)}</div>
+                  </div>
+                  <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                    {s.report?.rating&&<span className="badge badge-green">Rating: {s.report.rating}/10</span>}
+                    <button className="btn btn-outline btn-sm" onClick={()=>downloadReport(s)}>↓ Report</button>
+                  </div>
+                </div>
+              ))}
+              {completedSessions.length===0&&<div style={{textAlign:"center",padding:"30px 0",color:"var(--text3)"}}>No completed sessions yet.</div>}
+            </div>
+          </div>}
+
+          {/* CANDIDATES */}
+          {view==="candidates"&&<div className="fade-in">
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+              <div className="sec-title" style={{margin:0}}>All Candidates</div>
+              <button className="btn btn-primary btn-sm" onClick={()=>setShowModal(true)}>+ Add Candidate</button>
+            </div>
+            <div className="card" style={{padding:0,overflow:"hidden"}}>
+              <table className="table">
+                <thead><tr>
+                  <th>Name</th><th>Email</th><th>Created</th><th>Sessions</th><th>Status</th><th>Actions</th>
+                </tr></thead>
+                <tbody>
+                  {candidates.map(c=>{
+                    const cSessions=sessions.filter(s=>s.candidate_id===c.id);
+                    const last=cSessions[0];
+                    return(
+                      <tr key={c.id}>
+                        <td style={{fontWeight:600}}>{c.name}</td>
+                        <td style={{fontFamily:"'DM Mono',monospace",fontSize:12}}>{c.email}</td>
+                        <td style={{fontSize:12,color:"var(--text3)"}}>{fmtDate(c.created_at)}</td>
+                        <td><span className="badge badge-blue">{cSessions.length}</span></td>
+                        <td>
+						  {last
+							? <span className={`badge ${
+								last.status==="completed" ? "badge-green" :
+								last.status==="terminated" ? "badge-red" :
+								"badge-yellow"
+							  }`}>
+								{last.status}
+							  </span>
+							: <span className="badge badge-gray">Not Started</span>
+						  }
+						</td>
+                        <td>
+                          <div style={{display:"flex",gap:6}}>
+                            {last?.status==="completed"&&<button className="btn btn-outline btn-sm" onClick={()=>downloadReport(last)}>↓ Report</button>}
+                            <button className="btn btn-danger btn-sm" onClick={()=>deleteCandidate(c.id,c.email)}>Delete</button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {candidates.length===0&&<tr><td colSpan={6} style={{textAlign:"center",padding:"30px",color:"var(--text3)"}}>No candidates yet. Add one to get started.</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </div>}
+
+          {/* SESSIONS */}
+          {view==="sessions"&&<div className="fade-in">
+            <div className="sec-title">All Sessions</div>
+            {selSession?(
+              <div>
+                <button className="btn btn-ghost btn-sm" style={{marginBottom:12}} onClick={()=>setSelSession(null)}>← Back</button>
+                <div className="card">
+                  <div className="card-hdr">
+                    <div>
+                      <div className="card-title">{selSession.candidate_name||selSession.candidate_email}</div>
+                      <div style={{fontSize:12,color:"var(--text3)",marginTop:2}}>{fmtDate(selSession.created_at)} · {Math.round((selSession.duration||3600)/60)} min</div>
+                    </div>
+                    <button className="btn btn-primary btn-sm" onClick={()=>downloadReport(selSession)}>↓ Download Report</button>
+                  </div>
+                  {selSession.report&&<div style={{display:"grid",gap:12}}>
+                    <div style={{display:"flex",gap:10,alignItems:"center"}}>
+                      <div style={{fontSize:36,fontWeight:800,fontFamily:"'DM Mono',monospace",color:"var(--accent)"}}>{selSession.report.rating}/10</div>
+                      <div>
+                        <div style={{fontWeight:700}}>Overall Rating</div>
+                        <div style={{fontSize:12,color:"var(--text2)"}}>{selSession.report.recommendation}</div>
+                      </div>
+                    </div>
+                    <div><div style={{fontSize:11,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",marginBottom:5}}>Summary</div><div style={{fontSize:13,color:"var(--text2)",lineHeight:1.6}}>{selSession.report.summary}</div></div>
+                    <div><div style={{fontSize:11,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",marginBottom:5}}>Thinking Capability</div><div style={{fontSize:13,color:"var(--text2)",lineHeight:1.6}}>{selSession.report.thinking_analysis}</div></div>
+                    <div><div style={{fontSize:11,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",marginBottom:5}}>Communication</div><div style={{fontSize:13,color:"var(--text2)",lineHeight:1.6}}>{selSession.report.communication}</div></div>
+                    <div><div style={{fontSize:11,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",marginBottom:5}}>Client Handling Potential</div><div style={{fontSize:13,color:"var(--text2)",lineHeight:1.6}}>{selSession.report.client_handling}</div></div>
+                  </div>}
+                  <div style={{marginTop:16}}>
+                    <div style={{fontSize:11,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",marginBottom:10}}>Full Transcript</div>
+                    <div style={{maxHeight:400,overflowY:"auto",display:"flex",flexDirection:"column",gap:8}}>
+                      {(selSession.messages||[]).map((m,i)=>(
+                        <div key={i} style={{padding:"10px 13px",borderRadius:9,background:m.role==="ai"?"var(--surface)":"var(--accent-l)",border:"1px solid var(--border)"}}>
+                          <div style={{fontSize:10,fontWeight:700,color:m.role==="ai"?"var(--text3)":"var(--accent)",textTransform:"uppercase",marginBottom:4}}>{m.role==="ai"?"AI Interviewer":"Candidate"}</div>
+                          <div style={{fontSize:13,lineHeight:1.6,color:"var(--text)"}}>{m.content}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ):(
+              <div className="card" style={{padding:0,overflow:"hidden"}}>
+                <table className="table">
+                  <thead><tr><th>Candidate</th><th>Date</th><th>Duration</th><th>Status</th><th>Rating</th><th>Actions</th></tr></thead>
+                  <tbody>
+                    {sessions.map(s=>(
+                      <tr key={s.id} onClick={()=>setSelSession(s)}>
+                        <td style={{fontWeight:600}}>{s.candidate_name||s.candidate_email}</td>
+                        <td style={{fontSize:12,color:"var(--text3)"}}>{fmtDate(s.created_at)}</td>
+                        <td style={{fontSize:12}}>{s.duration?Math.round(s.duration/60)+" min":"—"}</td>
+                        <td><span className={`badge ${s.status==="completed"?"badge-green":s.status==="active"?"badge-red":"badge-gray"}`}>{s.status}</span></td>
+                        <td>{s.report?.rating?<span className="badge badge-blue">{s.report.rating}/10</span>:"—"}</td>
+                        <td onClick={e=>e.stopPropagation()}><button className="btn btn-outline btn-sm" onClick={()=>downloadReport(s)} disabled={!s.report}>↓ Report</button></td>
+                      </tr>
+                    ))}
+                    {sessions.length===0&&<tr><td colSpan={6} style={{textAlign:"center",padding:"30px",color:"var(--text3)"}}>No sessions yet.</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>}
+
+          {/* SETTINGS */}
+          {view==="settings"&&<div className="fade-in" style={{maxWidth:560}}>
+            <div className="sec-title">Settings</div>
+            <div className="card" style={{marginBottom:14}}>
+              <div className="card-hdr"><div className="card-title">HuggingFace API Token</div></div>
+              <p style={{fontSize:13,color:"var(--text2)",marginBottom:12,lineHeight:1.6}}>Get a free token from <a href="https://huggingface.co/settings/tokens" target="_blank" style={{color:"var(--accent)",fontWeight:600}}>huggingface.co/settings/tokens</a>. Stored securely in database, used for all candidate sessions.</p>
+              <div style={{display:"flex",gap:8}}>
+                <input className="input" type="password" placeholder="hf_..." value={geminiInput} onChange={e=>setGeminiInput(e.target.value)} style={{flex:1,fontFamily:"'DM Mono',monospace",fontSize:12}}/>
+                <button className="btn btn-primary btn-sm" onClick={saveGeminiKey}>Save</button>
+              </div>
+              {geminiKey&&<div style={{fontSize:12,color:"var(--green)",marginTop:8}}>✓ Token saved · {geminiKey.slice(0,16)}...</div>}
+            </div>
+            <div className="card" style={{marginBottom:14}}>
+              <div className="card-hdr"><div className="card-title">Appearance</div></div>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                <div style={{fontSize:13,color:"var(--text2)"}}>Currently: {theme==="light"?"Light mode":"Dark mode"}</div>
+                <button className="theme-toggle" onClick={()=>setTheme(t=>t==="light"?"dark":"light")}>{theme==="light"?"Switch to Dark 🌙":"Switch to Light ☀️"}</button>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-hdr"><div className="card-title">HR Access</div></div>
+              <div style={{fontSize:13,color:"var(--text2)",marginBottom:10}}>The following emails have HR access:</div>
+              {HR_EMAILS.map((e,i)=><div key={i} style={{padding:"7px 10px",background:"var(--surface)",borderRadius:7,marginBottom:6,fontFamily:"'DM Mono',monospace",fontSize:12}}>{e}</div>)}
+            </div>
+          </div>}
+        </div>
+      </div>
+
+      {/* Create Candidate Modal */}
+      {showModal&&(
+        <div className="modal-overlay" onClick={()=>setShowModal(false)}>
+          <div className="modal" onClick={e=>e.stopPropagation()}>
+            <div className="modal-title">Add New Candidate</div>
+            <label className="auth-label">Full Name</label>
+            <input className="input" placeholder="John Doe" value={newCand.name} onChange={e=>setNewCand(p=>({...p,name:e.target.value}))} style={{marginBottom:10}}/>
+            <label className="auth-label">Email</label>
+            <input className="input" type="email" placeholder="candidate@email.com" value={newCand.email} onChange={e=>setNewCand(p=>({...p,email:e.target.value}))} style={{marginBottom:10}}/>
+            <label className="auth-label">Password</label>
+            <input className="input" type="text" placeholder="Set a password for candidate" value={newCand.password} onChange={e=>setNewCand(p=>({...p,password:e.target.value}))} style={{marginBottom:16}}/>
+			<label className="auth-label">Upload Resume (PDF/DOCX)</label>
+			<input
+			  type="file"
+			  accept=".pdf,.doc,.docx"
+			  className="input"
+			  style={{marginBottom:16}}
+			  onChange={async (e)=>{
+				  const file = e.target.files[0];
+				  if (!file) return;
+
+				  try {
+					let text = "";
+
+					if (file.type === "application/pdf") {
+					  text = await readPDF(file);
+					} else {
+					  text = await readDOCX(file);
+					}
+
+					if (!text || text.length < 50) {
+					  alert("Could not extract text properly.");
+					  return;
+					}
+
+					resumeRef.current = text; // ✅ STORE HERE
+
+					setNewCand(p => ({
+					  ...p,
+					  resumeText: text
+					}));
+
+					alert("✅ Resume processed!");
+				  } catch (err) {
+					alert("Error reading file: " + err.message);
+				  }
+				}}
+			/>
+
+            <div className="info-box" style={{marginBottom:16,fontSize:12}}>After creating, share the portal link + these credentials with the candidate.</div>
+            <div style={{display:"flex",gap:8}}>
+              <button className="btn btn-primary" onClick={createCandidate} disabled={createLoading}>{createLoading?"Creating...":"Create Candidate"}</button>
+              <button className="btn btn-ghost" onClick={()=>setShowModal(false)}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   CANDIDATE PORTAL
+══════════════════════════════════════════ */
+function CandidatePortal({user}){
+  const [step,setStep]=useState("chat");// upload | chat | done
+  const [geminiKey,setGeminiKey]=useState("");
+  const [resumeText,setResumeText] = useState("");
+  const [messages,setMessages]=useState([]);
+  const [input,setInput]=useState("");
+  const [aiTyping,setAiTyping]=useState(false);
+  const [sessionId,setSessionId]=useState(null);
+  const [timeLeft,setTimeLeft]=useState(3600); // 60 min
+  const [sessionStart,setSessionStart]=useState(null);
+  const [phase,setPhase]=useState("intro"); // intro | technical | general | done
+  const [msgCount,setMsgCount]=useState(0);
+  const [theme,setTheme]=useState(()=>localStorage.getItem("ciq_theme")||"light");
+  const chatRef=useRef();
+  const timerRef=useRef();
+  const dragging=useRef(false);
+
+  useEffect(()=>{document.documentElement.setAttribute("data-theme",theme);localStorage.setItem("ciq_theme",theme);},[theme]);
+  useEffect(()=>{if(chatRef.current) chatRef.current.scrollTop=chatRef.current.scrollHeight;},[messages,aiTyping]);
+
+  // Timer
+  useEffect(()=>{
+    if(step!=="chat") return;
+    timerRef.current=setInterval(()=>{
+      setTimeLeft(t=>{
+        if(t<=1){clearInterval(timerRef.current);endSession();return 0;}
+        // Switch to general phase at 15 min remaining
+        if(t===900) setPhase("general");
+        return t-1;
+      });
+    },1000);
+    return()=>clearInterval(timerRef.current);
+  },[step]);
+
+  // Check if candidate already has a completed session
+  useEffect(()=>{
+  const check=async()=>{
+    const c=sb();
+    if(!c) return;
+
+    const { data } = await c
+      .from("sessions")
+      .select("*")
+      .eq("candidate_id", user.id)
+      .order("created_at",{ascending:false})
+      .limit(1)
+      .maybeSingle();
+
+	if (data?.status === "completed") {
+	  setStep("done");
+	}
+	else if (data?.status === "terminated") {
+	  // ❌ Hard block re-entry
+	  setStep("done");
+	}
+	else if (data?.status === "active") {
+	  // ✅ Resume only if session still active (network issue)
+	  setSessionId(data.id);
+	  setMessages(data.messages || []);
+	  setStep("chat");
+	}
+	else {
+	  await startSession();
+	}
+  };
+
+  check();
+},[]);
+
+  // Load gemini key from Supabase
+  useEffect(()=>{
+    const load=async()=>{
+      const c=sb();
+      if(!c) return;
+      const{data}=await c.from("config").select("value").eq("key","gemini_key").single();
+      if(data) setGeminiKey(data.value);
+    };
+    load();
+  },[]);
+
+
+  const startSession=async()=>{
+	const c = sb();
+
+	// fetch resume uploaded by HR
+	const resume= "";
+    
+
+    // Create session record
+    const sid="sess_"+Date.now();
+    setSessionId(sid);
+    await c.from("sessions").insert({
+      id:sid,
+      candidate_id:user.id,
+      candidate_email:user.email,
+      candidate_name:user.user_metadata?.full_name||user.email.split("@")[0],
+      status:"active",
+      resume_text: resume,
+      messages:[],
+      created_at:new Date().toISOString()
+    });
+
+    // Get first message from AI
+    try{
+      const sysPrompt=buildSystemPrompt(resume,user.user_metadata?.full_name||"there");
+	  let firstMsgText = "";
+		try {
+		  firstMsgText = await callOpenAI([], sysPrompt, user.id);
+		} catch (e) {
+		  firstMsgText = "Hello! Welcome to your discussion session. Please introduce yourself briefly.";
+		}
+
+		const initMessages = [
+		  {
+			role: "ai",
+			content: firstMsgText,
+			ts: new Date().toISOString()
+		  }
+		];
+
+setMessages(initMessages);
+
+		await c.from("sessions").update({
+		  messages: JSON.parse(JSON.stringify(initMessages))
+		}).eq("id",sid);
+    }catch(e){
+      alert("Error starting session: "+e.message);
+      return;
+    }
+
+    setSessionStart(Date.now());
+    setStep("chat");
+  };
+
+  const buildSystemPrompt=(resumeText,candidateName)=>{
+    return`You are conducting a 60-minute smart discussion session with ${candidateName}, a candidate applying for a developer/architect/BA role. This is NOT a formal interview — it is a relaxed but insightful conversation.
+
+CANDIDATE'S RESUME:
+${resumeText ? resumeText.slice(0,4000) : "No resume provided"}
+
+SESSION STRUCTURE (you manage the timing internally):
+- First 45 minutes: Conversational discussion about their background, projects, technical decisions, and experience
+- Last 15 minutes: General knowledge discussion (AI trends, current events, world affairs)
+
+RULES:
+1. Start with a warm welcome, introduce yourself as the AI discussion facilitator, and ask the candidate to briefly introduce themselves (keep answers to about 3 minutes — mention this gently)
+2. Ask questions based on their ACTUAL resume — reference specific projects, technologies, companies they worked at
+3. Ask follow-up questions based on their answers — dig deeper, be curious
+4. Ask WHY they made certain technical choices, what alternatives they considered
+5. Probe their thinking process, not just knowledge
+6. Keep questions concise and conversational — this is a discussion, not an interrogation
+7. For technical topics: ask about their projects specifically, not generic tech questions
+8. For general knowledge (last 15 min): ask about AI trends, global events, current affairs — evaluate how they think and communicate about broader topics
+9. After the session ends (you'll be told), thank them and ask them to sign out
+10. At any point you can ask follow-up questions to their answers
+11. ONE question at a time — don't bombard them
+12. Be encouraging and warm
+
+EVALUATION CRITERIA (observe throughout, don't mention):
+- Thinking capability and depth
+- Communication clarity
+- Problem-solving approach
+- Technical depth vs breadth
+- Curiosity and learning mindset
+- Client-facing potential
+
+Begin now with a warm welcome.`;
+  };
+
+  const sendMessage=async()=>{
+    if(!input.trim()||aiTyping) return;
+    const userMsg={role:"user",content:input.trim(),ts:new Date().toISOString()};
+    const newMessages=[...messages,userMsg];
+    setMessages(newMessages);
+    setInput("");
+    setMsgCount(c=>c+1);
+    setAiTyping(true);
+
+    // Update phase based on message count and time
+    const elapsed=Math.floor((Date.now()-(sessionStart||Date.now()))/1000);
+    if(elapsed<2700&&phase==="intro"&&msgCount>3) setPhase("technical");
+
+    try{
+      const sysPrompt=buildSystemPrompt(resumeText,user.user_metadata?.full_name||"there")
+        +`\n\nCurrent phase: ${phase}. Time elapsed: ${Math.floor(elapsed/60)} minutes. Time remaining: ${Math.floor(timeLeft/60)} minutes.`
+        +(timeLeft<=900?"\n\nIMPORTANT: You are now in the final 15 minutes. Transition to general knowledge discussion about AI trends, current global events, etc.":"")
+        +(timeLeft<=120?"\n\nIMPORTANT: Only 2 minutes left. Start wrapping up the conversation gracefully.":"");
+
+      const aiResponse = await callOpenAI(newMessages, sysPrompt, user.id);
+      const aiMsg={role:"ai",content:aiResponse,ts:new Date().toISOString()};
+      const finalMessages=[...newMessages,aiMsg];
+      setMessages(finalMessages);
+
+      // Save to Supabase
+      const c=sb();
+      await c.from("sessions")
+	  .update({ messages: JSON.parse(JSON.stringify(finalMessages)) })
+	  .eq("id", sessionId);
+    }
+	catch(e){
+      const errMsg={role:"ai",content:"I'm having a connection issue. Please try again in a moment.",ts:new Date().toISOString()};
+      setMessages(prev=>[...prev,errMsg]);
+    }
+    setAiTyping(false);
+  };
+  
+
+  const endSession=async(isForced=false)=>{
+    clearInterval(timerRef.current);
+    setPhase("done");
+    setAiTyping(true);
+
+    try{
+      const c=sb();
+      const duration = sessionStart? Math.floor((Date.now() - sessionStart) / 1000) : 0;
+
+      // Generate report
+      const reportPrompt=`Based on this 60-minute discussion session, generate a comprehensive evaluation report.
+
+	CANDIDATE: ${user.user_metadata?.full_name||user.email}
+	RESUME: ${(resumeText || "No resume available").slice(0,2000)}
+
+	FULL CONVERSATION:
+	${messages.length
+	  ? messages.map(m=>`[${m.role==="ai"?"Interviewer":"Candidate"}]: ${m.content}`).join("\n\n")
+	  : "Candidate logged out immediately. No conversation available."}
+	${isForced ? "\nNOTE: Candidate exited early." : ""}
+
+	Generate a JSON report with these exact fields:
+	{
+	  "rating": <number 1-10>,
+	  "summary": "<3-4 sentence overall summary>",
+	  "thinking_analysis": "<detailed analysis of thinking capability, depth of thought, problem-solving approach>",
+	  "communication": "<assessment of communication clarity, articulation, confidence>",
+	  "client_handling": "<assessment of client-facing potential based on how they explained things, handled follow-ups>",
+	  "strengths": ["<strength 1>","<strength 2>","<strength 3>"],
+	  "improvements": ["<area 1>","<area 2>"],
+	  "recommendation": "<one clear recommendation paragraph>"
+	}
+	Return ONLY valid JSON, no markdown.`;
+
+		  const reportRaw = await callOpenAI(
+	  [{ role: "user", content: reportPrompt }],
+	  "You are an expert HR evaluator. Return ONLY valid JSON.",
+	  user.id
+	);
+		  let report = {};
+
+		try {
+		  let t = reportRaw.replace(/```json|```/g, "").trim();
+		  const s = t.indexOf("{"), e = t.lastIndexOf("}");
+		  if (s > -1 && e > -1) {
+			report = JSON.parse(t.slice(s, e + 1));
+		  }
+		} catch (err) {
+		  console.error("Report parse failed:", err);
+		}
+
+	// ✅ ALWAYS ensure report exists
+	if (!report || Object.keys(report).length === 0) {
+	  report = {
+		rating: messages.length === 0 ? 0 : 5,
+		summary: messages.length === 0
+		  ? "Candidate logged out immediately. No conversation."
+		  : "Session ended early. Partial evaluation based on available discussion.",
+		thinking_analysis: "Limited data due to early termination.",
+		communication: "Insufficient interaction to fully assess.",
+		client_handling: "Not enough data.",
+		strengths: [],
+		improvements: ["Session ended early — incomplete evaluation."],
+		recommendation: "Recommend re-evaluation with full session."
+	  };
+    }
+	
+	// Final message
+      const finalMsg={
+	  role:"ai",
+	  content: isForced ? messages.length === 0 ? "Candidate logged out immediately after login. No conversation took place.": "Session ended early by candidate. Report generated based on partial conversation." : "Thank you so much for your time today! It was a wonderful conversation. Please sign out now. 🙏",
+	  ts:new Date().toISOString()
+	};
+      const finalMessages=[...messages,finalMsg];
+      setMessages(finalMessages);
+
+      await c.from("sessions").update({
+		  status: isForced ? "terminated" : "completed",
+		  duration,
+		  report,
+		  messages: JSON.parse(JSON.stringify(finalMessages)),
+		  completed_at:new Date().toISOString()
+		}).eq("id",sessionId);
+
+		} catch(e){
+		  console.error(e);
+		}
+  setAiTyping(false);
+    setStep("done");
+	};
+
+  const logout=async()=>{await sb()?.auth.signOut();window.location.reload();};
+	  
+	  const handleForceExit = async () => {
+  const confirmExit = window.confirm(
+    "⚠ If you exit now, you cannot rejoin.\n\nYour report will be generated based on current progress.\n\nDo you want to continue?"
+  );
+
+  if (!confirmExit) return;
+
+  const c = sb();
+  let sid = sessionId;
+
+  // ✅ Ensure session always exists
+  if (!sid) {
+    sid = "sess_" + Date.now();
+    setSessionId(sid);
+
+    await c.from("sessions").insert({
+      id: sid,
+      candidate_id: user.id,
+      candidate_email: user.email,
+      candidate_name: user.user_metadata?.full_name || user.email,
+      status: "active",
+      messages: [],
+      created_at: new Date().toISOString()
+    });
+  }
+
+  await endSession(true);
+
+  setTimeout(async () => {
+    await logout();
+  }, 500);
+};
+
+  const timerColor=timeLeft>900?"var(--green)":timeLeft>300?"var(--yellow)":"var(--red)";
+  const progressPct=((3600-timeLeft)/3600)*100;
+
+  if(step==="done") return(
+    <div style={{display:"flex",height:"100vh",alignItems:"center",justifyContent:"center",background:"var(--bg)"}}>
+      <div style={{textAlign:"center",maxWidth:440,padding:20}}>
+        <div style={{fontSize:60,marginBottom:16}}>✅</div>
+        <div style={{fontSize:22,fontWeight:800,color:"var(--text)",marginBottom:8}}>Session Already Completed</div>
+        <div style={{fontSize:14,color:"var(--text2)",lineHeight:1.7,marginBottom:24}}>
+          Your discussion session has been completed and submitted to the HR team.<br/><br/>
+          You cannot start a new session. If you believe this is a mistake, please contact HR.
+        </div>
+        <button className="btn btn-primary" style={{padding:"12px 32px"}} onClick={logout}>Sign Out</button>
+      </div>
+    </div>
+  );
+
+  return(
+    <div style={{display:"flex",height:"100vh",overflow:"hidden"}}>
+      <div className="sidebar">
+        <div className="sidebar-top">
+          <div className="logo-mark">
+            <div className="logo-icon">C</div>
+            <div>
+              <div className="logo-name">CandidateIQ</div>
+              <div className="logo-sub">In Session</div>
+            </div>
+          </div>
+        </div>
+        <div className="nav">
+          <div className="nav-item active"><span className="nav-icon">💬</span>Discussion</div>
+          <div style={{padding:"12px 10px"}}>
+            <div className="timer-bar" style={{flexDirection:"column",alignItems:"flex-start",gap:6}}>
+              <div style={{display:"flex",alignItems:"center",gap:6,width:"100%"}}>
+                <div className={`timer-dot${timeLeft<=900?" warn":""} ${timeLeft<=300?" end":""}`}/>
+                <span style={{color:timerColor,fontWeight:700,fontSize:15}}>{fmtTime(timeLeft)}</span>
+                <span style={{fontSize:10,color:"var(--text3)",marginLeft:"auto"}}>remaining</span>
+              </div>
+              <div className="prog-bar" style={{width:"100%"}}>
+                <div className="prog-fill" style={{width:progressPct+"%",background:timerColor}}/>
+              </div>
+            </div>
+            <div style={{marginTop:10}}>
+              <div className={`phase-pill ${phase==="intro"?"phase-intro":phase==="technical"?"phase-tech":phase==="general"?"phase-general":"phase-done"}`}>
+                {phase==="intro"?"🗣 Introduction":phase==="technical"?"⚙ Technical Discussion":phase==="general"?"🌍 General Discussion":"✅ Completed"}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="user-panel">
+          <div className="u-avatar" style={{background:aColor(user.email)}}>{ini(user.email)}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div className="u-name">{user.user_metadata?.full_name||user.email.split("@")[0]}</div>
+          </div>
+        </div>
+      </div>
+      <div className="main">
+        <div className="topbar">
+          <div className="topbar-title">Live Session</div>
+          <span className="topbar-sep">·</span>
+          <div className="topbar-sub">{user.user_metadata?.full_name||user.email.split("@")[0]}</div>
+          {timeLeft<=900&&<div className="warn-box" style={{padding:"4px 10px",fontSize:12,marginLeft:8}}>⏰ Last 15 minutes — general discussion</div>}
+		  <button className="btn btn-danger btn-sm" style={{marginLeft:10}} onClick={handleForceExit}>End Session</button>
+          <div style={{marginLeft:"auto"}}><button className="theme-toggle" onClick={()=>setTheme(t=>t==="light"?"dark":"light")}>{theme==="light"?"🌙":"☀️"}</button></div>
+        </div>
+        <div className="chat-wrap">
+          <div className="chat-messages" ref={chatRef}>
+            {messages.map((m,i)=>(
+              <div key={i} className={`msg ${m.role==="ai"?"ai":"user"}`}>
+                <div className={`msg-avatar ${m.role==="ai"?"msg-ai-av":"msg-user-av"}`}>{m.role==="ai"?"AI":"You"}</div>
+                <div>
+                  <div className="msg-bubble">{m.content}</div>
+                  <div className="msg-time">{new Date(m.ts).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}</div>
+                </div>
+              </div>
+            ))}
+            {aiTyping&&(
+              <div className="msg ai">
+                <div className="msg-avatar msg-ai-av">AI</div>
+                <div className="msg-bubble"><div className="typing"><span/><span/><span/></div></div>
+              </div>
+            )}
+          </div>
+          <div className="chat-input-wrap">
+            <div style={{fontSize:11,color:"var(--text3)",marginBottom:6}}>Keep your answer concise (about 3 minutes). Press Enter to send, Shift+Enter for new line.</div>
+            <div className="chat-input-row">
+              <textarea
+                className="chat-textarea"
+                placeholder="Type your response here..."
+                value={input}
+                onChange={e=>setInput(e.target.value)}
+                onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMessage();}}}
+                disabled={aiTyping || phase==="done" || messages.length === 0}
+                rows={2}
+              />
+              <button className="send-btn" onClick={sendMessage} disabled={aiTyping || !input.trim() || phase==="done" || messages.length === 0}>➤</button>
+            </div>
+            {timeLeft<=300&&timeLeft>0&&<div className="error-box" style={{marginTop:8,fontSize:12}}>⚠ Less than 5 minutes remaining. Session will end automatically.</div>}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   ROOT APP
+══════════════════════════════════════════ */
+function App(){
+  const [user,setUser]=useState(null);
+  const [authLoading,setAuthLoading]=useState(true);
+  useEffect(()=>{
+    const c=sb();
+    if(!c){setAuthLoading(false);return;}
+    c.auth.getSession().then(({data})=>{setUser(data.session?.user||null);setAuthLoading(false);});
+    const{data:{subscription}}=c.auth.onAuthStateChange((_,s)=>setUser(s?.user||null));
+    return()=>subscription.unsubscribe();
+  },[]);
+  if(authLoading) return(
+    <div style={{width:"100%",height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"var(--bg)"}}>
+      <div className="spinner" style={{width:32,height:32,border:"3px solid var(--border2)",borderTopColor:"var(--accent)"}}/>
+    </div>
+  );
+  if(!user) return <AuthScreen onAuth={u=>setUser(u)}/>;
+  if(isHR(user.email)) return <HRDashboard user={user}/>;
+  return <CandidatePortal user={user}/>;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

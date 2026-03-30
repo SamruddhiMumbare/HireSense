@@ -1,0 +1,2235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>TalentIQ — HR Screening Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+/* ═══ THEME TOKENS ═══ */
+[data-theme="light"]{
+  --bg:#F0F2F5;--sidebar:#FFFFFF;--card:#FFFFFF;--surface:#F7F8FA;--surface2:#EEF0F3;
+  --border:#E3E6EC;--border2:#CDD2DB;
+  --accent:#4F6EF7;--accent-d:#3A57E8;--accent-l:#EEF1FF;--accent-m:#C7D0FB;
+  --green:#0A9272;--green-l:#E6F7F4;--green-m:#9FE0D4;
+  --red:#E0382A;--red-l:#FEF0EF;
+  --yellow:#C07A10;--yellow-l:#FEF7EC;
+  --purple:#6E40C9;--purple-l:#F1ECFE;
+  --text:#111827;--text2:#4B5563;--text3:#9CA3AF;
+  --shadow:0 1px 4px rgba(0,0,0,0.07),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg:0 12px 32px rgba(0,0,0,0.1);
+  --overlay:rgba(17,24,39,0.4);
+  --input-bg:#F7F8FA;--input-focus:#FFFFFF;
+  --topbar-bg:#FFFFFF;
+}
+[data-theme="dark"]{
+  --bg:#0E1117;--sidebar:#13171F;--card:#1A1F2B;--surface:#1F2535;--surface2:#252B3B;
+  --border:#2A3145;--border2:#3A4460;
+  --accent:#6B8DF7;--accent-d:#5579F5;--accent-l:#1C2347;--accent-m:#2D3D7A;
+  --green:#0FC99A;--green-l:#0D2B24;--green-m:#0A5445;
+  --red:#F06F65;--red-l:#2C1412;
+  --yellow:#F5C24A;--yellow-l:#2B2208;
+  --purple:#A780FA;--purple-l:#1F1538;
+  --text:#E8EBF0;--text2:#8B95A8;--text3:#505A6E;
+  --shadow:0 1px 4px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.35);
+  --shadow-lg:0 12px 40px rgba(0,0,0,0.5);
+  --overlay:rgba(0,0,0,0.65);
+  --input-bg:#1F2535;--input-focus:#252B3B;
+  --topbar-bg:#13171F;
+}
+
+body{background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;height:100vh;overflow:hidden;display:flex;font-size:14px;line-height:1.5;transition:background 0.2s,color 0.2s}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+
+/* ═══ AUTH ═══ */
+.auth-page{width:100%;height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg)}
+[data-theme="light"] .auth-page{background:linear-gradient(145deg,#EEF1FF 0%,#F7F8FF 40%,#F0F2F5 100%)}
+[data-theme="dark"] .auth-page{background:linear-gradient(145deg,#0E1117 0%,#141824 100%)}
+.auth-box{width:440px}
+.auth-logo{text-align:center;margin-bottom:30px}
+.auth-brand{display:inline-flex;align-items:center;gap:10px;margin-bottom:8px}
+.auth-icon{width:40px;height:40px;background:var(--accent);border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;box-shadow:0 4px 12px rgba(79,110,247,0.35)}
+.auth-logo-name{font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+.auth-logo-sub{font-size:13px;color:var(--text3);font-family:'DM Mono',monospace}
+.auth-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:32px;box-shadow:var(--shadow-lg)}
+.auth-title{font-size:19px;font-weight:700;color:var(--text);margin-bottom:5px}
+.auth-sub{font-size:13px;color:var(--text2);margin-bottom:24px;line-height:1.55}
+.auth-label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:5px;margin-top:14px;text-transform:uppercase;letter-spacing:0.5px}
+.auth-input{width:100%;background:var(--input-bg);border:1.5px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;outline:none;transition:all 0.15s}
+.auth-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-m);background:var(--input-focus)}
+.auth-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:12px;font-family:'Manrope',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:18px;transition:all 0.15s;letter-spacing:0.2px}
+.auth-btn:hover{background:var(--accent-d);transform:translateY(-1px);box-shadow:0 4px 12px rgba(79,110,247,0.4)}
+.auth-btn:active{transform:translateY(0)}
+.auth-btn:disabled{background:var(--border2);color:var(--text3);cursor:not-allowed;transform:none;box-shadow:none}
+.auth-error{background:var(--red-l);border:1px solid var(--red);border-radius:8px;padding:10px 13px;font-size:13px;color:var(--red);margin-bottom:14px}
+.auth-switch{text-align:center;margin-top:18px;font-size:13px;color:var(--text2)}
+.auth-switch span{color:var(--accent);cursor:pointer;font-weight:700}
+.auth-switch span:hover{text-decoration:underline}
+.setup-note{background:var(--yellow-l);border:1px solid var(--yellow);border-radius:10px;padding:14px;margin-top:16px;font-size:12px;color:var(--yellow);line-height:1.8}
+.setup-note a{color:var(--accent)}
+
+/* ═══ LAYOUT ═══ */
+.sidebar{width:242px;min-width:242px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:background 0.2s}
+.sidebar-top{padding:18px 16px 14px;border-bottom:1px solid var(--border)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:33px;height:33px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;flex-shrink:0;box-shadow:0 2px 6px rgba(79,110,247,0.3)}
+.logo-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.3px}
+.logo-sub{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:1px}
+.nav{padding:10px 8px;flex:1;overflow-y:auto}
+.nav-sec{padding:10px 10px 5px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all 0.12s;border-radius:8px;margin-bottom:1px}
+.nav-item:hover{color:var(--text);background:var(--surface)}
+.nav-item.active{color:var(--accent);background:var(--accent-l);font-weight:600}
+.nav-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.nav-new{margin:0 8px 10px;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:10px 14px;font-family:'Manrope',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:7px;justify-content:center;box-shadow:0 2px 6px rgba(79,110,247,0.25)}
+.nav-new:hover{background:var(--accent-d);box-shadow:0 4px 10px rgba(79,110,247,0.4);transform:translateY(-1px)}
+.model-pill{margin:0 8px 8px;padding:8px 11px;background:var(--green-l);border:1px solid var(--green-m);border-radius:8px}
+.model-pill-name{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--green);letter-spacing:0.3px}
+.model-pill-sub{font-size:10px;color:var(--green);opacity:0.7;margin-top:1px}
+.user-panel{padding:10px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:9px}
+.u-avatar{width:31px;height:31px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:#fff}
+.u-name{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.u-email{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.logout-btn{background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:5px;flex-shrink:0;transition:color 0.15s;border-radius:5px;line-height:1}
+.logout-btn:hover{color:var(--red);background:var(--red-l)}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.topbar{padding:0 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;height:55px;background:var(--topbar-bg);flex-shrink:0;transition:background 0.2s}
+.topbar-title{font-size:14px;font-weight:700;color:var(--text)}
+.topbar-sub{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
+.topbar-sep{color:var(--border2);font-size:16px;line-height:1}
+.content{flex:1;overflow-y:auto;padding:22px 24px}
+
+/* ═══ THEME TOGGLE ═══ */
+.theme-toggle{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text2);transition:all 0.15s;white-space:nowrap}
+.theme-toggle:hover{border-color:var(--border2);color:var(--text);background:var(--surface2)}
+
+/* ═══ MODAL ═══ */
+.modal-overlay{position:fixed;inset:0;background:var(--overlay);z-index:500;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);padding:28px;max-width:540px;width:90%;animation:slideUp 0.2s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:6px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.55}
+
+/* ═══ COMPONENTS ═══ */
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow)}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px}
+.sec-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px}
+.btn{border:none;border-radius:8px;padding:9px 16px;font-family:'Manrope',sans-serif;font-weight:600;font-size:13px;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-d);transform:translateY(-1px);box-shadow:0 3px 8px rgba(79,110,247,0.35)}
+.btn-primary:active{transform:translateY(0)}
+.btn-primary:disabled{background:var(--border2);color:var(--text3);cursor:not-allowed;transform:none;box-shadow:none}
+.btn-outline{background:transparent;color:var(--accent);border:1.5px solid var(--accent-m)}
+.btn-outline:hover{background:var(--accent-l)}
+.btn-success{background:var(--green);color:#fff}
+.btn-success:hover{opacity:0.88}
+.btn-danger{background:transparent;color:var(--red);border:1.5px solid var(--red)}
+.btn-danger:hover{background:var(--red-l)}
+.btn-ghost{background:transparent;color:var(--text2);border:1.5px solid var(--border)}
+.btn-ghost:hover{background:var(--surface);color:var(--text);border-color:var(--border2)}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:7px}
+.btn-xs{padding:3px 8px;font-size:11px;border-radius:5px}
+.input{background:var(--input-bg);border:1.5px solid var(--border);border-radius:9px;padding:10px 13px;color:var(--text);font-family:'Manrope',sans-serif;font-size:14px;outline:none;transition:all 0.15s;width:100%}
+.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-m);background:var(--input-focus)}
+.textarea{resize:vertical;min-height:130px;line-height:1.6}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;gap:4px;white-space:nowrap}
+.badge-blue{background:var(--accent-l);color:var(--accent);border:1px solid var(--accent-m)}
+.badge-green{background:var(--green-l);color:var(--green);border:1px solid var(--green-m)}
+.badge-red{background:var(--red-l);color:var(--red);border:1px solid var(--red)}
+.badge-yellow{background:var(--yellow-l);color:var(--yellow);border:1px solid var(--yellow)}
+.badge-purple{background:var(--purple-l);color:var(--purple);border:1px solid var(--purple)}
+.badge-gray{background:var(--surface);color:var(--text2);border:1px solid var(--border)}
+.info-box{background:var(--accent-l);border:1px solid var(--accent-m);border-radius:9px;padding:11px 14px;font-size:13px;line-height:1.6;color:var(--accent)}
+.success-box{background:var(--green-l);border:1px solid var(--green-m);border-radius:9px;padding:11px 14px;font-size:13px;line-height:1.6;color:var(--green)}
+.warn-box{background:var(--yellow-l);border:1px solid var(--yellow);border-radius:9px;padding:10px 14px;font-size:13px;color:var(--yellow)}
+.fade-in{animation:fadeIn 0.25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{border-radius:50%;animation:spin 0.75s linear infinite}
+
+/* ═══ DASHBOARD ═══ */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;box-shadow:var(--shadow)}
+.stat-icon-wrap{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.stat-num{font-size:25px;font-weight:800;font-family:'DM Mono',monospace;line-height:1;letter-spacing:-0.5px}
+.stat-label{font-size:11px;color:var(--text3);margin-top:5px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+
+/* ═══ SCREENING CARD ═══ */
+.scard{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;margin-bottom:8px;box-shadow:var(--shadow)}
+.scard:hover{border-color:var(--accent-m);box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.creator-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;font-family:'DM Mono',monospace}
+
+/* ═══ STEPS ═══ */
+.step-bar{display:flex;align-items:center;margin-bottom:22px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 20px;box-shadow:var(--shadow)}
+.step-dot{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:500;color:var(--text3)}
+.step-dot.active{color:var(--accent);font-weight:600}
+.step-dot.done{color:var(--green)}
+.step-num{width:25px;height:25px;border-radius:50%;border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:11px;font-family:'DM Mono',monospace;font-weight:600;flex-shrink:0;background:var(--card)}
+.step-dot.active .step-num{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:0 0 0 3px var(--accent-m)}
+.step-dot.done .step-num{border-color:var(--green);background:var(--green);color:#fff}
+.step-label{white-space:nowrap;font-size:12px}
+.step-line{flex:1;height:2px;background:var(--border);margin:0 9px;border-radius:1px}
+.step-line.done{background:var(--green)}
+
+/* ═══ FILE UPLOAD ═══ */
+.drop-zone{border:2px dashed var(--border2);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all 0.15s;background:var(--surface)}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:var(--accent-l)}
+.file-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
+.mode-tab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;border:1.5px solid var(--border);background:var(--card);color:var(--text2)}
+.mode-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+
+/* ═══ PROGRESS ═══ */
+.prog-track{background:var(--surface);border-radius:20px;height:6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--accent),var(--green));transition:width 0.4s}
+
+/* ═══ CHAT ═══ */
+.chat-wrap{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.chat-msgs{overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;min-height:160px;flex:1}
+.chat-msg{padding:10px 13px;border-radius:10px;font-size:13px;line-height:1.65;max-width:88%;white-space:pre-wrap}
+.chat-msg.user{background:var(--accent);color:#fff;border-radius:10px 10px 3px 10px;margin-left:auto;box-shadow:0 2px 6px rgba(79,110,247,0.3)}
+.chat-msg.assistant{background:var(--card);border:1px solid var(--border);border-radius:10px 10px 10px 3px;box-shadow:var(--shadow)}
+.chat-msg.assistant-typing{color:var(--text3);display:flex;align-items:center;gap:8px}
+.chat-row{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border);background:var(--card)}
+.chat-input{flex:1;background:var(--input-bg);border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Manrope',sans-serif;font-size:13px;outline:none;transition:all 0.15s}
+.chat-input:focus{border-color:var(--accent);background:var(--input-focus)}
+
+/* ═══ FORMULA ═══ */
+.f-row{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:8px}
+.f-bar-track{background:var(--border);border-radius:4px;height:5px;margin:7px 0}
+.f-bar-fill{height:5px;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--purple));transition:width 0.5s}
+.f-band{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);background:var(--card);padding:2px 7px;border-radius:4px;border:1px solid var(--border)}
+
+/* ═══ TABLE ═══ */
+.c-table{width:100%;border-collapse:collapse}
+.c-table thead{position:sticky;top:0;z-index:1}
+.c-table th{text-align:left;padding:10px 13px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;border-bottom:2px solid var(--border);background:var(--surface);white-space:nowrap}
+.c-table td{padding:11px 13px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+.c-table tbody tr{transition:background 0.1s;cursor:pointer}
+.c-table tbody tr:hover td{background:var(--accent-l)}
+.c-table tbody tr.expanded td{background:var(--accent-l)}
+.score-badge{display:inline-flex;align-items:center;justify-content:center;width:44px;height:26px;border-radius:6px;font-family:'DM Mono',monospace;font-size:12px;font-weight:700}
+.s-ex{background:var(--green-l);color:var(--green);border:1px solid var(--green-m)}
+.s-go{background:var(--accent-l);color:var(--accent);border:1px solid var(--accent-m)}
+.s-fa{background:var(--yellow-l);color:var(--yellow);border:1px solid var(--yellow)}
+.s-po{background:var(--red-l);color:var(--red);border:1px solid var(--red)}
+.tier-top{background:var(--green-l);border:1px solid var(--green-m);color:var(--green);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.tier-bot{background:var(--surface);border:1px solid var(--border);color:var(--text3);font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700;white-space:nowrap}
+
+/* ═══ EXPAND PANEL ═══ */
+.exp-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:5px;box-shadow:var(--shadow-md)}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:16px}
+.tab{padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.15s}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.bd-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.bd-item{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px}
+.q-item{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px;margin-bottom:8px}
+.role-item{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+
+/* ═══ PREV JD CARD ═══ */
+.prev-jd-card{background:var(--surface);border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.15s;margin-bottom:8px}
+.prev-jd-card:hover{border-color:var(--accent-m);background:var(--accent-l)}
+.prev-jd-card.selected{border-color:var(--accent);background:var(--accent-l)}
+
+/* ═══ NEW SCREENING DROPDOWN ═══ */
+/* ═══ NEW SCREENING MODAL ═══ */
+.ns-modal{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-lg);width:680px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;animation:slideUp 0.2s ease}
+.ns-modal-head{padding:20px 22px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.ns-modal-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px}
+.ns-modal-sub{font-size:13px;color:var(--text2);line-height:1.5}
+.ns-list{overflow-y:auto;flex:1;padding:8px 0}
+.ns-item{border-bottom:1px solid var(--border)}
+.ns-item:last-child{border-bottom:none}
+.ns-item-row{display:flex;align-items:center;padding:11px 20px;gap:12px}
+.ns-item-body{flex:1;min-width:0;cursor:pointer;user-select:none}
+.ns-item-title{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color 0.1s;display:flex;align-items:center;gap:6px}
+.ns-item-title:hover{color:var(--accent)}
+.ns-item-meta{font-size:10px;color:var(--text3);font-family:"DM Mono",monospace;margin-top:3px}
+.ns-item-tags{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap;align-items:center}
+.ns-action-select{font-size:12px;font-weight:600;padding:6px 10px;border-radius:7px;border:1.5px solid var(--border2);background:var(--surface);color:var(--text2);cursor:pointer;outline:none;font-family:"Manrope",sans-serif;transition:all 0.15s;flex-shrink:0;min-width:160px;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239CA3AF'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:26px}
+.ns-action-select:hover{border-color:var(--accent-m);background-color:var(--accent-l)}
+.ns-action-select:focus{border-color:var(--accent);background-color:var(--input-focus)}
+.ns-preview{background:var(--surface);border-top:1px solid var(--border);padding:14px 20px;animation:fadeIn 0.15s ease}
+.ns-preview-section{margin-bottom:10px}
+.ns-preview-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px}
+.ns-preview-text{font-size:12px;color:var(--text2);line-height:1.55}
+.ns-preview-tags{display:flex;flex-wrap:wrap;gap:4px}
+.ns-formula-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.ns-formula-name{font-size:12px;color:var(--text2);font-weight:500;min-width:120px}
+.ns-formula-bar{flex:1;height:5px;background:var(--border);border-radius:3px;margin:0 10px;overflow:hidden}
+.ns-formula-fill{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--purple))}
+.ns-formula-pts{font-size:11px;color:var(--accent);font-family:"DM Mono",monospace;font-weight:700;min-width:34px;text-align:right}
+.ns-modal-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px}
+.ns-fresh-btn{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--text2);background:none;border:1.5px solid var(--border);border-radius:7px;padding:7px 14px;cursor:pointer;font-family:"Manrope",sans-serif;transition:all 0.15s}
+.ns-fresh-btn:hover{border-color:var(--border2);color:var(--text);background:var(--surface)}
+
+/* ═══ DUP WARNING ═══ */
+.dup-item{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dup-item.flagged{border-color:var(--yellow);background:var(--yellow-l)}
+</style>
+</head>
+<body>
+<div id="root" style="display:flex;width:100%;height:100vh"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback}=React;
+const API_URL = "/api/openai"; // backend endpoint
+
+/* ── Single AI function — Groq/Llama for everything ── */
+async function ai(sys, usr, maxT = 4096, temp = 0.1) {
+  const r = await fetch("/api/openai", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages: [
+        { role: "system", content: sys },
+        { role: "user", content: usr }
+      ],
+      max_tokens: maxT,
+      temperature: temp
+    })
+  });
+
+  const d = await r.json();
+
+  if (d.error) {
+    console.error("API ERROR:", d.error);
+    return null;   // 🔥 important
+  }
+
+  if (!d.choices || !d.choices[0]) {
+    return null;
+  }
+
+  return d.choices[0].message.content;
+}
+const aiOpenai=ai;
+
+/* ── Robust JSON parser — handles truncated output ── */
+function toJ(raw){
+  let t=raw.replace(/```(?:json)?\s*\n?/g,"").replace(/```\s*/g,"").trim();
+  const s=t.indexOf("{");
+  if(s===-1) throw new Error("No JSON found in response");
+  t=t.slice(s);
+  // If JSON is truncated (no closing brace) try to close it
+  const opens=(t.match(/{/g)||[]).length;
+  const closes=(t.match(/}/g)||[]).length;
+  if(opens>closes){
+    // Remove any trailing incomplete key/value
+    t=t.replace(/,\s*"[^"]*"\s*:\s*[^,}\]]*$/,"");
+    t=t.replace(/,\s*"[^"]*"\s*:?\s*$/,"");
+    // Close any unclosed arrays
+    const arrOpen=(t.match(/\[/g)||[]).length;
+    const arrClose=(t.match(/\]/g)||[]).length;
+    for(let i=0;i<arrOpen-arrClose;i++) t+="]";
+    // Close missing braces
+    const stillOpen=(t.match(/{/g)||[]).length-(t.match(/}/g)||[]).length;
+    for(let i=0;i<stillOpen;i++) t+="}";
+  }
+  const e=t.lastIndexOf("}");
+  if(e!==-1) t=t.slice(0,e+1);
+  try{return JSON.parse(t);}catch(_){}
+  t=t.replace(/,\s*([}\]])/g,"$1")
+     .replace(/([{,]\s*)(\w+)\s*:/g,'$1"$2":')
+     .replace(/:\s*'([^']*)'/g,':"$1"')
+     .replace(/\\'/g,"'")
+     .replace(/[\u0000-\u001F\u007F-\u009F]/g," ");
+  try{return JSON.parse(t);}catch(e2){throw new Error("JSON parse failed: "+e2.message);}
+}
+
+/* ── Supabase ── */
+let _sb=null;
+function sb(){
+  if(_sb) return _sb;
+  const u=localStorage.getItem("tiq_sb_url"),k=localStorage.getItem("tiq_sb_anon");
+  if(!u||!k) return null;
+  _sb=window.supabase.createClient(u,k);
+  return _sb;
+}
+async function dbSave(s,uid,email){
+  const c=sb(); if(!c) throw new Error("Supabase not configured.");
+  const{error}=await c.from("screenings").upsert({id:s.id,created_by:uid,created_by_email:email,jd_title:s.jdTitle,jd_reqs:s.jdReqs,formula:s.formula,candidates:s.candidates,created_at:s.createdAt,status:s.status});
+  if(error) throw new Error("Save failed: "+error.message);
+}
+async function dbLoad(){
+  const c=sb(); if(!c) return [];
+  const{data,error}=await c.from("screenings").select("*").order("created_at",{ascending:false});
+  if(error){console.error(error);return[];}
+  return(data||[]).map(r=>({id:r.id,jdTitle:r.jd_title,jdReqs:r.jd_reqs,formula:r.formula,candidates:r.candidates,createdAt:r.created_at,status:r.status,createdByEmail:r.created_by_email}));
+}
+async function dbDelete(id){
+  const c=sb(); if(!c) throw new Error("Supabase not configured.");
+  const{error}=await c.from("screenings").delete().eq("id",id);
+  if(error) throw new Error("Delete failed: "+error.message);
+}
+
+/* ── File extractors ── */
+async function pdfLib(){
+  if(window.pdfjsLib) return window.pdfjsLib;
+  await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+  window.pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  return window.pdfjsLib;
+}
+async function readPDF(f){
+  try{
+    const lib=await pdfLib();
+    const pdf=await lib.getDocument({data:await f.arrayBuffer()}).promise;
+    let pages=[];
+    for(let i=1;i<=pdf.numPages;i++){
+      const pg=await pdf.getPage(i);
+      const ct=await pg.getTextContent();
+
+      // Sort by Y descending (top of page first), then X ascending (left to right)
+      // This correctly handles two-column layouts where PDF.js returns items in render order
+      const items=ct.items.filter(x=>x.str&&x.str.trim());
+      items.sort((a,b)=>{
+        const dy=b.transform[5]-a.transform[5];
+        if(Math.abs(dy)>4) return dy;       // different rows: top first
+        return a.transform[4]-b.transform[4]; // same row: left first
+      });
+
+      // Group into lines (items within 4 units of each other in Y = same line)
+      const lines=[];
+      let curLine=[];
+      let lastY=null;
+      for(const item of items){
+        const y=item.transform[5];
+        if(lastY===null||Math.abs(y-lastY)>4){
+          if(curLine.length) lines.push(curLine.join(" "));
+          curLine=[item.str];
+          lastY=y;
+        }else{
+          curLine.push(item.str);
+        }
+      }
+      if(curLine.length) lines.push(curLine.join(" "));
+      pages.push(lines.join("\n"));
+    }
+    return pages.join("\n\n").trim();
+  }catch{return "";}
+}
+async function readDOCX(f){try{const r=await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()});return r.value.trim();}catch{return "";}}
+async function readFile(f){const n=f.name.toLowerCase();if(n.endsWith(".pdf")||f.type==="application/pdf")return readPDF(f);if(n.endsWith(".docx")||n.endsWith(".doc"))return readDOCX(f);return f.text();}
+
+/* ══════════════════════════════════════════
+   AI FUNCTIONS
+══════════════════════════════════════════ */
+async function analyzeJD(jd){
+  const sys="You are an expert HR analyst. Extract every detail from this job description. Return ONLY valid JSON, no markdown.";
+  const schema=`{"jobTitle":"","department":"","company":"","location":"","employmentType":"Full-time|Part-time|Contract","experienceRange":{"min":0,"max":0},"requiredSkills":[],"preferredSkills":[],"education":{"required":"","preferred":"","fields":[]},"domain":"e.g. Backend Development, ML/AI, Frontend, DevOps, Data Science, Mobile, Full Stack, QA, Cloud","subDomain":"","certifications":{"required":[],"preferred":[]},"responsibilities":[],"seniority":"Junior|Mid|Senior|Lead|Manager","techStack":[],"softSkills":[],"keyRequirements":[],"salaryRange":"if mentioned or empty string","summary":"2-sentence summary of the role and what makes an ideal candidate"}`;
+  return toJ(await aiOpenai(sys,
+  "Analyze this job description thoroughly. Extract EVERY detail including implicit requirements:\n\nJOB DESCRIPTION:\n"+jd+"\n\nReturn this exact JSON schema filled in:\n"+schema,4096));
+}
+
+/* Quick identity extraction for duplicate check — fast, minimal tokens */
+async function quickExtractIdentity(text){
+  const sys="Extract only name and phone from this resume text. Return ONLY valid JSON, nothing else.";
+  const usr="Resume text:\n"+text.slice(0,1500)+"\n\nReturn JSON: {\"name\":\"full name or empty string\",\"phone\":\"digits only or empty string\",\"email\":\"or empty string\"}";
+  try {return toJ(await aiOpenai(sys, usr, 200, 0));}
+  catch{return{name:"",phone:"",email:""};}
+}
+
+/* Full in-depth resume parse — single pass, robust schema */
+/* Pre-process raw resume text — strip noise before passing to AI */
+function preprocessResume(raw){
+  let t = raw;
+  // Strip confidential/restricted headers (Oracle, company watermarks)
+  t = t.replace(/confidential\s*[-\u2013]\s*\w+\s*\w*\s*restricted[^\n]*/gi, '');
+  t = t.replace(/confidential[^\n]{0,30}\n/gi, '');
+  t = t.replace(/for\s+internal\s+use\s+only[^\n]*/gi, '');
+  // Strip repeated blank lines left by removals
+  t = t.replace(/\n{3,}/g, '\n\n').trim();
+  return t;
+}
+
+async function parseResume(text){
+  // Pre-process before anything else
+  text = preprocessResume(text);
+  const sys=`You are an expert resume parser. Extract EVERYTHING from this resume with maximum depth and accuracy.
+
+CRITICAL — READ EVERY LINE of the resume without skipping anything:
+
+RULE 1 — SKILLS FROM ALL SECTIONS (most important):
+Extract technologies/tools/skills mentioned ANYWHERE — not just the Skills section:
+• Explicit skills section → include all
+• Work experience bullets → if a bullet says "built REST APIs using Node.js", add Node.js to technical[], REST API to technical[]
+• "Deployed application on AWS EC2" → add AWS to cloud[], EC2 to cloud[]
+• "Used Git for version control" → add Git to tools[] even if not in skills section
+• "Wrote unit tests with Jest" → add Jest to tools[], Testing to methodologies[]
+• Project descriptions → every technology mentioned goes into skills
+• Certifications → technologies implied by cert (AWS cert → AWS in cloud[])
+• TABLE FORMAT SKILLS — many resumes list skills in a table like "Skill Name | Version | Last Used | Experience". Extract the skill name from every row of such tables (e.g. "WebLogic | 12c | 2024 | 5y 5m" → WebLogic in tools[])
+• "Skill Used : Weblogic, Node.Js, IIS Server" in project details → extract all into tools[]
+
+RULE 2 — INDIRECT SKILL/DOMAIN INFERENCE (read between the lines):
+If the explicit technology name is NOT mentioned but the work implies it:
+• "reduced model inference latency" → ML/AI work, add "ML Inference" to technical[]
+• "implemented recommendation engine" → ML/AI, add "Recommendation Systems"
+• "processed 10M events/day" → likely Kafka/streaming, add "High Volume Processing"
+• "containerized the application" → Docker, add Docker to tools[]
+• "blue-green deployments" → DevOps, add "CI/CD", "Deployment Automation"
+• "designed database schema for 50 tables" → Database design, add to technical[]
+• "optimized slow queries" → SQL optimization, add to technical[]
+• "A/B tested UI changes" → Frontend/Product
+
+RULE 3 — PER-ROLE DOMAIN (IGNORE JOB TITLES completely):
+For EACH experience entry, decide the domain from what they ACTUALLY DID:
+• "Software Developer" who wrote client proposals + no coding mentioned → Business Analysis
+• "Consultant" who built Java microservices → Backend Development
+• "Analyst" who built ML models in Python → ML/AI
+• "Associate" who built React UIs → Frontend Development
+Mixed role: someone who spent 60% on backend + 40% on ML → roleDomain = "Backend Development / ML/AI"
+Write actualWork as: "Built [specific thing] using [tech] at [company]"
+
+RULE 4 — EXPERIENCE YEARS (be precise):
+• If dates given: calculate exactly. "Jan 2020 – Mar 2022" = 2.2 years
+• If only years: "2020–2022" = 2 years
+• Sum ALL roles for totalExperience (no gaps, just sum of all role durations)
+• If current role has no end date, calculate up to present (2024)
+• MULTIPLE EXPERIENCE ENTRIES: create a SEPARATE entry in experience[] for EVERY job role listed. Do not merge or skip any role. A candidate with 4 jobs must have 4 entries.
+• Each entry must have its own technologies[], actualWork, and roleDomain based on THAT specific role's bullets — not a mix across all roles
+
+RULE 5 — DEPTH PER SKILL:
+Based on action verbs and duration, classify each significant skill:
+• "led", "architected", "3+ years" → expert
+• "built", "designed", "implemented" → working  
+• "used", "assisted with", "familiar with" → exposure
+Store in skillDepth array.
+
+RULE 6 — COMPLETENESS:
+Never leave experience[].technologies empty if ANY tech appears in that role's description.
+Never leave projects[].technologies empty if project description mentions any tech.
+Return ONLY valid JSON. No markdown fences. No explanation outside JSON.`;
+
+  const schema='{"name":"","email":"","phone":"","linkedin":"","location":"","totalExperience":0,"currentRole":"","currentCompany":"","education":[{"degree":"","field":"","institution":"","year":0}],"experience":[{"company":"","role":"","years":0,"from":"","to":"","technologies":[],"actualWork":"","roleDomain":"","depthLevel":"","achievements":[]}],"skills":{"technical":[],"tools":[],"languages":[],"frameworks":[],"databases":[],"cloud":[],"methodologies":[]},"skillDepth":[{"skill":"","depth":"exposure|working|expert","evidenceFrom":""}],"projects":[{"name":"","technologies":[],"impact":""}],"certifications":[],"inferredDomain":"","domainEvidence":"","allDomains":[],"careerLevel":"","keyStrengths":[],"redFlags":[]}'
+
+
+  const resumeText = preprocessResume(text);
+  // Smart truncate for Groq — Llama 3.3 handles 8k output tokens max
+  // Keep full text up to 6000 chars (enough for any resume)
+  const truncated = resumeText.length > 6000
+    ? resumeText.slice(0, 400) + "\n\n" + resumeText.slice(resumeText.search(/experience|work|employment/i) || 400)
+    : resumeText;
+  const finalText = truncated.slice(0, 5000); // ~1250 tokens — keeps total under 6k/min limit
+
+  return toJ(await ai(
+    sys,
+    "Parse this resume completely. Extract skills from EVERY section including experience bullets and project descriptions.\n\nRESUME:\n"+finalText+"\n\nReturn ONLY valid JSON, no markdown:\n"+schema,
+    3500, 0.1
+  ));
+}
+
+/* buildFormula: uses full chat HISTORY so model remembers all priorities */
+async function buildFormula(jdR,chatHistory,prevFormula){
+  const sys=`You are an expert HR scoring formula designer with MEMORY.
+
+MEMORY RULES — CRITICAL:
+1. Read ALL HR messages in order (chronological)
+2. Later messages REFINE or ADD TO earlier ones — they do NOT replace them unless HR explicitly says so
+3. If HR said "experience is top priority" and later says "also make projects equally important" → BOTH get equal highest weight
+4. If HR says "keep X same, change Y" → keep X exactly as current weight, only change Y
+5. If HR says "same points" or "equal weight" for multiple criteria → assign EXACTLY equal maxPoints
+6. Build the formula as the CUMULATIVE result of every message HR has sent
+
+PRIORITY LANGUAGE MAPPING:
+- "highest priority / most important / first priority" → 28-35 pts
+- "same as [other criterion]" → exactly equal points
+- "second priority / also important" → 18-25 pts  
+- "somewhat important / third" → 10-15 pts
+- "low priority / minor" → 5-8 pts
+- "doesn't matter / skip" → 3 pts (still include)
+
+EXAMPLES:
+- "experience and skills same highest priority, rest lower" → experience=30, skills_match=30, remaining 40 split across 4
+- "keep projects, skills, experience same and highest" → all three get equal top weight (~27 pts each), remaining 19 split across 3
+- HR previously had experience=30, now says "reduce experience, give more to education" → reduce experience, increase education, keep rest
+
+MUST sum to exactly 100. All 6 keys required.
+Return ONLY valid JSON. No markdown outside JSON.`;
+
+  const hrMsgs=chatHistory.filter(m=>m.role==="user");
+  const prevNote=prevFormula
+    ? "CURRENT formula weights (only change what HR explicitly asked to change):\n"+JSON.stringify(prevFormula.criteria?.map(c=>({key:c.key,name:c.name,pts:c.maxPoints})))
+    : "No previous formula. Build from scratch.";
+
+  const usr=`Design a 100-point scoring formula as the CUMULATIVE result of this entire conversation.
+
+JOB: ${jdR.jobTitle} (${jdR.domain})
+Experience required: ${jdR.experienceRange?.min}-${jdR.experienceRange?.max} years
+Required skills: ${(jdR.requiredSkills||[]).join(", ")}
+Tech stack: ${(jdR.techStack||[]).join(", ")}
+
+${prevNote}
+
+COMPLETE HR CONVERSATION (all ${hrMsgs.length} messages — honor ALL of them cumulatively):
+${hrMsgs.map((m,i)=>`[Message ${i+1}]: "${m.content}"`).join("\n")}
+
+Return this JSON:
+{
+  "criteria":[{
+    "key":"experience|skills_match|education|domain_match|certifications|projects_quality",
+    "name":"",
+    "maxPoints":0,
+    "priority":1,
+    "bands":[
+      {"label":"Below minimum","condition":"below required threshold","multiplier":0.0},
+      {"label":"At minimum","condition":"meets minimum requirement","multiplier":0.5},
+      {"label":"Ideal range","condition":"perfectly within JD range","multiplier":1.0},
+      {"label":"Slightly over","condition":"up to 2 years / 20% over ideal","multiplier":0.6},
+      {"label":"Way over","condition":"significantly exceeds requirement","multiplier":0.25}
+    ],
+    "rationale":"why this weight reflects the cumulative HR priorities"
+  }],
+  "totalPoints":100,
+  "rationale":"explain how this formula reflects ALL HR inputs across the full conversation",
+  "tieBreaker":"what to use when two candidates have equal scores"
+}
+Include all 6 criteria keys. Must sum to exactly 100.`;
+
+  return toJ(await ai(sys,usr,3500,0.1));
+}
+
+async function scoreOne(cand,formula,jdR){
+  const cd=cand.parsedData||{};
+
+  // Defensive: if totalExperience is 0 but we have experience entries, estimate it
+  if((!cd.totalExperience||cd.totalExperience===0)&&(cd.experience||[]).length>0){
+    const totalFromRoles=(cd.experience||[]).reduce((s,e)=>s+(e.years||0),0);
+    if(totalFromRoles>0) cd.totalExperience=parseFloat(totalFromRoles.toFixed(1));
+  }
+
+  // Defensive: merge all skills from experience technologies if skills are empty
+  const expTechs=(cd.experience||[]).flatMap(e=>e.technologies||[]);
+  const projTechs=(cd.projects||[]).flatMap(p=>p.technologies||[]);
+  if((!cd.skills?.technical||cd.skills.technical.length===0)&&expTechs.length>0){
+    cd.skills=cd.skills||{};
+    cd.skills.technical=[...new Set(expTechs)];
+  }
+  const allSkills=[
+    ...(cd.skills?.technical||[]),...(cd.skills?.tools||[]),...(cd.skills?.frameworks||[]),
+    ...(cd.skills?.databases||[]),...(cd.skills?.cloud||[]),...(cd.skills?.languages||[]),
+    ...(cd.skills?.methodologies||[]),
+    ...(cd.experience||[]).flatMap(e=>e.technologies||[]),
+    ...(cd.projects||[]).flatMap(p=>p.technologies||[])
+  ].map(s=>s.toLowerCase()).filter((v,i,a)=>a.indexOf(v)===i);
+
+  const sys=`You are a precise, deterministic HR scoring engine.
+RULES:
+1. Apply formula bands EXACTLY. score = Math.round(maxPoints * multiplier). No rounding differently.
+2. skills_match: check allSkills (merged from all sections). ALSO use skillDepth — a candidate with "expert" depth in a required skill should score higher on skills_match than one with only "exposure". Adjust matchPct accordingly.
+3. experience: compare totalExperience against JD range bands exactly.
+4. domain_match: use domainEvidence which contains per-role analysis. If the candidate's PRIMARY domain strongly matches JD domain, full marks. If secondary domain matches, partial. If no overlap, low.
+5. projects_quality: use indirectDomainSignals from projects to find hidden relevant work even if not explicitly labelled.
+6. Same inputs → ALWAYS same output. Be fully deterministic.
+7. Return ONLY valid JSON.`;
+
+  const usr=`Score this candidate deterministically.
+
+JD: ${jdR.jobTitle} | ${jdR.domain} | Exp: ${jdR.experienceRange?.min}-${jdR.experienceRange?.max}yr
+Required: ${JSON.stringify(jdR.requiredSkills||[])} | Stack: ${JSON.stringify(jdR.techStack||[])}
+
+Formula: ${JSON.stringify(formula.criteria?.map(c=>({key:c.key,max:c.maxPoints,bands:c.bands})))}
+
+Candidate:
+- Experience: ${cd.totalExperience}yr | Current Role: ${cd.currentRole} | Primary Domain: ${cd.inferredDomain}
+- ALL skills (merged from every section): ${JSON.stringify(allSkills)}
+- Education: ${JSON.stringify(cd.education?.slice(0,3))}
+- Certifications: ${JSON.stringify(cd.certifications||[])}
+- Projects: ${JSON.stringify((cd.projects||[]).slice(0,4).map(p=>({name:p.name,tech:p.technologies,impact:p.impact})))}
+- Work history with actual domain per role: ${JSON.stringify((cd.experience||[]).slice(0,4).map(e=>({role:e.role,years:e.years,roleDomain:e.roleDomain||"unknown",actualWork:e.actualWork||"",depthLevel:e.depthLevel||"",tech:e.technologies,achievements:e.achievements?.slice(0,2)})))}
+- Domain evidence (per-role reasoning): ${cd.domainEvidence||""}
+- Skill depth breakdown: ${JSON.stringify((cd.skillDepth||[]).slice(0,15))}
+- Projects with indirect signals: ${JSON.stringify((cd.projects||[]).slice(0,3).map(p=>({name:p.name,tech:p.technologies,indirectSignals:p.indirectDomainSignals||""})))}
+
+Return JSON:
+{"totalScore":0,"breakdown":{"experience":{"score":0,"max":0,"band":"","reason":""},"skills_match":{"score":0,"max":0,"reason":"","matched":[],"missing":[],"matchPct":0},"education":{"score":0,"max":0,"reason":""},"domain_match":{"score":0,"max":0,"reason":""},"certifications":{"score":0,"max":0,"reason":"","found":[]},"projects_quality":{"score":0,"max":0,"reason":"","highlights":[]}},"strengths":[],"gaps":[],"fit":"Excellent|Good|Fair|Poor","fitReason":"","hiringRecommendation":"Strongly Recommend|Recommend|Consider|Not Recommended"}`;
+  return toJ(await aiOpenai(sys,usr,3000,0));
+}
+
+
+
+async function suggestR(cand,jdR){
+  const cd=cand.parsedData||{};
+  const sys="You are an expert career advisor. Return ONLY valid JSON.";
+  const usr=`Suggest better-fit roles for this candidate who didn't match the JD well.
+Applied: ${jdR.jobTitle} (${jdR.domain}) | Gaps: ${JSON.stringify(cand.score?.gaps?.slice(0,4))}
+Candidate: domain=${cd.inferredDomain}, allDomains=${JSON.stringify(cd.allDomains)}, skills=${JSON.stringify([...(cd.skills?.technical||[]),...(cd.skills?.frameworks||[])].slice(0,14))}, exp=${cd.totalExperience}yr, role=${cd.currentRole}
+Strengths: ${JSON.stringify(cd.keyStrengths||[])}
+Return JSON: {"candidateSummary":"3-sentence honest profile","primaryStrength":"","suggestedRoles":[{"title":"","domain":"","reason":"based on actual evidence","matchStrength":"Strong|Good|Moderate","keySkillsTheyHave":[],"gapToClose":""}]}`;
+  return toJ(await ai(sys,usr,2000));
+}
+
+async function batch(items,fn,size=2,onProg,delay=2000){
+  // Groq free tier: 30 req/min, 6000 tokens/min
+  // Strategy: process one at a time for heavy tasks, 2-sec gap between each
+  // On rate limit: exponential backoff — 15s, 30s, 60s
+  const out=[];
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  const isRateErr=msg=>msg&&(
+    msg.includes("429")||
+    msg.toLowerCase().includes("rate limit")||
+    msg.toLowerCase().includes("rate_limit")||
+    msg.toLowerCase().includes("too many")||
+    msg.toLowerCase().includes("tokens per minute")||
+    msg.toLowerCase().includes("requests per minute")
+  );
+  const isDailyErr=msg=>msg&&(
+    msg.toLowerCase().includes("tokens per day")||
+    msg.toLowerCase().includes("daily")||
+    msg.toLowerCase().includes("quota")||
+    msg.toLowerCase().includes("exceeded your current")
+  );
+
+  for(let i=0;i<items.length;i+=size){
+  const chunk=items.slice(i,i+size);
+
+  const results=await Promise.all(chunk.map(async(item,j)=>{
+    
+    // smaller stagger
+    if(j>0) await sleep(j*300);
+
+    for(let attempt=0;attempt<4;attempt++){
+      try{
+        const res=await fn(item,i+j);
+        onProg?.(i+j+1,items.length);
+        return res;
+
+      }catch(e){
+        const msg=e.message||"";
+
+        if(isDailyErr(msg)) throw e;
+
+        if(isRateErr(msg)&&attempt<3){
+          const wait=[2000,4000,8000][attempt]||8000;
+          console.warn(`Retry in ${wait/1000}s`);
+          await sleep(wait);
+          continue;
+        }
+
+        onProg?.(i+j+1,items.length);
+        throw e;
+      }
+    }
+  }));
+
+  results.forEach(x=>out.push(x));
+
+  // shorter batch delay
+  if(i+size<items.length) await sleep(500);
+}
+  return out;
+}
+
+/* Build CSV rows for a set of candidates with a screening title column */
+function buildCSVRows(candidates,screeningTitle,includeTitle=false){
+  const ranked=[...candidates].sort((a,b)=>(b.score?.totalScore||0)-(a.score?.totalScore||0));
+  const half=Math.ceil(ranked.length/2);
+  return ranked.map((c,i)=>[
+    ...(includeTitle?[screeningTitle]:[]),
+    i+1,c.parsedData?.name||"-",c.parsedData?.email||"-",c.parsedData?.phone||"-",
+    c.score?.totalScore??"-",c.score?.fit||"-",c.score?.hiringRecommendation||"-",
+    i<half?"Top 50%":"Bottom 50%",c.parsedData?.inferredDomain||"-",c.parsedData?.totalExperience||"-",
+    (c.score?.strengths||[]).join("; "),(c.score?.gaps||[]).join("; "),
+    (c.suggestedRoles?.suggestedRoles||[]).map(r=>r.title).join("; "),
+    c.parsedData?.linkedin||"-",c.hrNote||"-"
+  ]);
+}
+function makeCSV(headers,rows){
+  return[headers,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+}
+function downloadCSV(content,filename){
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([content],{type:"text/csv"}));
+  a.download=filename;a.click();
+}
+/* Single screening */
+function exportCSV(candidates,title){
+  const H=["Rank","Name","Email","Phone","Score","Fit","Recommendation","Tier","Domain","Experience","Strengths","Gaps","Suggested Roles","LinkedIn","HR Notes"];
+  downloadCSV(makeCSV(H,buildCSVRows(candidates,title)),`TalentIQ_${(title||"results").replace(/\s+/g,"_")}.csv`);
+}
+/* All screenings combined */
+function exportAllCSV(screenings){
+  const H=["Screening","Rank","Name","Email","Phone","Score","Fit","Recommendation","Tier","Domain","Experience","Strengths","Gaps","Suggested Roles"];
+  const rows=screenings.flatMap(s=>buildCSVRows(s.candidates||[],s.jdTitle,true));
+  downloadCSV(makeCSV(H,rows),`TalentIQ_All_Screenings_${new Date().toISOString().slice(0,10)}.csv`);
+}
+/* Per-HR screenings */
+function exportByHRCSV(screenings,email){
+  const mine=screenings.filter(s=>s.createdByEmail===email);
+  const H=["Screening","Rank","Name","Email","Phone","Score","Fit","Recommendation","Tier","Domain","Experience","Strengths","Gaps","Suggested Roles"];
+  const rows=mine.flatMap(s=>buildCSVRows(s.candidates||[],s.jdTitle,true));
+  downloadCSV(makeCSV(H,rows),`TalentIQ_${email.split("@")[0]}_Screenings.csv`);
+}
+
+/* ── Helpers ── */
+const avatarColors=["#4F6EF7","#7C3AED","#0A9272","#C07A10","#E0382A","#0891B2","#D946EF","#0369A1"];
+const aColor=e=>avatarColors[(e||"").charCodeAt(0)%avatarColors.length];
+const ini=e=>((e||"").split("@")[0].slice(0,2).toUpperCase());
+const sc=s=>s>=80?"s-ex":s>=60?"s-go":s>=40?"s-fa":"s-po";
+const fc=f=>f==="Excellent"?"badge-green":f==="Good"?"badge-blue":f==="Fair"?"badge-yellow":"badge-red";
+const normPhone=p=>(p||"").replace(/\D/g,"").slice(-10);
+const normName=n=>(n||"").toLowerCase().replace(/\s+/g," ").trim();
+
+/* Check if a parsed identity matches any candidate in existing screenings */
+function findDuplicateInHistory(identity,screenings){
+  const ph=normPhone(identity.phone); const nm=normName(identity.name);
+  if(!ph&&!nm) return null;
+  for(const scrn of screenings){
+    for(const c of (scrn.candidates||[])){
+      const ep=normPhone(c.parsedData?.phone); const en=normName(c.parsedData?.name);
+      if(ph&&ep&&ph===ep&&nm&&en&&nm===en){
+        return{screeningTitle:scrn.jdTitle,screeningDate:scrn.createdAt,candidateName:c.parsedData?.name,score:c.score?.totalScore};
+      }
+    }
+  }
+  return null;
+}
+
+/* ══════════════════════════════════════════
+   AUTH SCREEN
+══════════════════════════════════════════ */
+function AuthScreen({onAuth}){
+  const [mode,setMode]=useState("login");
+  const [step,setStep]=useState(localStorage.getItem("tiq_sb_url")?"auth":"setup");
+  const [sbUrl,setSbUrl]=useState(localStorage.getItem("tiq_sb_url")||"");
+  const [sbAnon,setSbAnon]=useState(localStorage.getItem("tiq_sb_anon")||"");
+  const [name,setName]=useState(""); const [email,setEmail]=useState(""); const [pass,setPass]=useState("");
+  const [err,setErr]=useState(""); const [loading,setLoading]=useState(false);
+
+  const saveSB=()=>{localStorage.setItem("tiq_sb_url",sbUrl);localStorage.setItem("tiq_sb_anon",sbAnon);_sb=null;setStep("auth");};
+  const handle=async()=>{
+    setErr("");setLoading(true);
+    try{
+      const c=sb();
+      if(!c){setErr("Supabase not configured.");setLoading(false);return;}
+      if(mode==="signup"){
+        const{data,error}=await c.auth.signUp({email,password:pass,options:{data:{full_name:name||email.split("@")[0]}}});
+        if(error) throw error;
+        if(data.session&&data.user) onAuth(data.user); else setErr("Account created! Check your email to confirm, then sign in.");
+      }else{
+        const{data,error}=await c.auth.signInWithPassword({email,password:pass});
+        if(error) throw error;
+        if(!data.session) throw new Error("No session — please confirm your email first, then sign in."); onAuth(data.user);
+      }
+    }catch(e){setErr(e.message||"Authentication error");}
+    setLoading(false);
+  };
+
+  if(step==="setup") return(
+    <div className="auth-page">
+      <div className="auth-box">
+        <div className="auth-logo">
+          <div className="auth-brand"><div className="auth-icon">T</div><div className="auth-logo-name">TalentIQ</div></div>
+          <div className="auth-logo-sub">HR Portal · Team Edition</div>
+        </div>
+        <div className="auth-card">
+          <div className="auth-title">Connect Shared Database</div>
+          <div className="auth-sub">Supabase stores all screenings shared across your HR team. Free setup — 2 minutes.</div>
+          <label className="auth-label">Supabase Project URL</label>
+          <input className="auth-input" placeholder="https://xxxx.supabase.co" value={sbUrl} onChange={e=>setSbUrl(e.target.value)}/>
+          <label className="auth-label">Anon / Public Key</label>
+          <input className="auth-input" type="password" placeholder="eyJhbGci..." value={sbAnon} onChange={e=>setSbAnon(e.target.value)}/>
+          <button className="auth-btn" onClick={saveSB} disabled={!sbUrl||!sbAnon}>Save & Continue →</button>
+          <div className="setup-note">
+            <strong>Quick setup:</strong><br/>
+            1. <a href="https://supabase.com" target="_blank">supabase.com</a> → New Project (free)<br/>
+            2. Settings → API → copy Project URL + anon key<br/>
+            3. SQL Editor → paste <code>supabase_setup.sql</code> → Run<br/>
+            4. Paste values above
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return(
+    <div className="auth-page">
+      <div className="auth-box">
+        <div className="auth-logo">
+          <div className="auth-brand"><div className="auth-icon">T</div><div className="auth-logo-name">TalentIQ</div></div>
+          <div className="auth-logo-sub">HR Screening Portal · Team Edition</div>
+        </div>
+        <div className="auth-card">
+          {err&&<div className="auth-error">⚠ {err}</div>}
+          <div className="auth-title">{mode==="login"?"Welcome back":"Create your account"}</div>
+          <div className="auth-sub">{mode==="login"?"All team screenings are shared and visible after sign in.":"Your account connects to the shared team workspace."}</div>
+          {mode==="signup"&&<><label className="auth-label">Full Name</label><input className="auth-input" placeholder="Priya Sharma" value={name} onChange={e=>setName(e.target.value)}/></>}
+          <label className="auth-label">Work Email</label>
+          <input className="auth-input" type="email" placeholder="hr@company.com" value={email} onChange={e=>setEmail(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handle()}/>
+          <label className="auth-label">Password</label>
+          <input className="auth-input" type="password" placeholder="••••••••" value={pass} onChange={e=>setPass(e.target.value)} onKeyDown={e=>e.key==="Enter"&&handle()}/>
+          <button className="auth-btn" onClick={handle} disabled={loading}>{loading?(mode==="login"?"Signing in...":"Creating account..."):(mode==="login"?"Sign In →":"Create Account →")}</button>
+          <div className="auth-switch">{mode==="login"?<>No account? <span onClick={()=>{setMode("signup");setErr("");}}>Create one</span></>:<>Have an account? <span onClick={()=>{setMode("login");setErr("");}}>Sign in</span></>}</div>
+          <div style={{textAlign:"center",marginTop:12}}><span style={{fontSize:11,color:"var(--text3)",cursor:"pointer"}} onClick={()=>setStep("setup")}>⚙ Change Supabase project</span></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   MODAL: New Screening — reuse previous JD/formula
+══════════════════════════════════════════ */
+function NewScreeningModal({screenings,onFresh,onSelect,onClose}){
+  const [expandedId,setExpandedId]=useState(null);
+  const [actions,setActions]=useState({});
+  const recent=screenings.slice(0,5);
+
+  const handleActionChange=(e,s)=>{
+    const val=e.target.value;
+    setActions(prev=>({...prev,[s.id]:val}));
+  };
+
+  const handleGo=(s)=>{
+    const act=actions[s.id];
+    if(!act){return;}
+    onClose();
+    onSelect(s,act);
+  };
+
+  const toggleExpand=(id)=>setExpandedId(prev=>prev===id?null:id);
+
+  return(
+    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="ns-modal">
+        {/* Header */}
+        <div className="ns-modal-head">
+          <div className="ns-modal-title">Start New Screening</div>
+          <div className="ns-modal-sub">Reuse a previous job description or scoring formula to save time, or start fresh.</div>
+        </div>
+
+        {/* List of previous screenings */}
+        <div className="ns-list">
+          {recent.map(s=>{
+            const isExp=expandedId===s.id;
+            const act=actions[s.id]||"";
+            return(
+              <div key={s.id} className="ns-item">
+                {/* Row */}
+                <div className="ns-item-row">
+                  {/* Left: clickable title + meta */}
+                  <div className="ns-item-body" onClick={()=>toggleExpand(s.id)}>
+                    <div className="ns-item-title">
+                      <span>{isExp?"▾":"▸"}</span>
+                      <span>{s.jdTitle}</span>
+                    </div>
+                    <div className="ns-item-meta">{new Date(s.createdAt).toLocaleDateString()} · {s.candidates?.length||0} candidates</div>
+                    <div className="ns-item-tags">
+                      {s.jdReqs?.domain&&<span className="badge badge-blue" style={{fontSize:9,padding:"1px 6px"}}>{s.jdReqs.domain}</span>}
+                      {s.jdReqs?.seniority&&<span className="badge badge-purple" style={{fontSize:9,padding:"1px 6px"}}>{s.jdReqs.seniority}</span>}
+                      {s.jdReqs?.experienceRange&&<span className="badge badge-gray" style={{fontSize:9,padding:"1px 6px"}}>{s.jdReqs.experienceRange.min}-{s.jdReqs.experienceRange.max}yr</span>}
+                      {s.formula&&<span className="badge badge-green" style={{fontSize:9,padding:"1px 6px"}}>Has formula</span>}
+                    </div>
+                  </div>
+
+                  {/* Right: dropdown + go button */}
+                  <div style={{display:"flex",flexDirection:"column",gap:5,alignItems:"flex-end",flexShrink:0}}>
+                    <select
+                      className="ns-action-select"
+                      value={act}
+                      onChange={e=>handleActionChange(e,s)}
+                    >
+                      <option value="">— Select action —</option>
+                      {s.formula&&<option value="both">Reuse JD + Formula</option>}
+                      <option value="jd">Reuse JD only</option>
+                      {s.formula&&<option value="formula">Reuse Formula only</option>}
+                    </select>
+                    {act&&(
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={()=>handleGo(s)}
+                      >Continue →</button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Expandable preview panel */}
+                {isExp&&(
+                  <div className="ns-preview">
+                    {/* JD section — show for "jd", "both", or nothing selected yet */}
+                    {(act===""||act==="jd"||act==="both")&&s.jdReqs&&(
+                      <div className="ns-preview-section">
+                        <div className="ns-preview-label">📋 Job Description</div>
+                        {s.jdReqs.summary&&<p className="ns-preview-text" style={{marginBottom:8}}>{s.jdReqs.summary}</p>}
+                        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:8,marginBottom:8}}>
+                          <div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,marginBottom:2}}>EXPERIENCE</div><span style={{fontSize:12,color:"var(--accent)",fontFamily:"DM Mono",fontWeight:700}}>{s.jdReqs.experienceRange?.min}–{s.jdReqs.experienceRange?.max} yrs</span></div>
+                          <div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,marginBottom:2}}>SENIORITY</div><span className="badge badge-purple" style={{fontSize:9}}>{s.jdReqs.seniority||"—"}</span></div>
+                          <div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,marginBottom:2}}>EDUCATION</div><span style={{fontSize:11,color:"var(--text2)"}}>{s.jdReqs.education?.required||"—"}</span></div>
+                        </div>
+                        {s.jdReqs.requiredSkills?.length>0&&(
+                          <div className="ns-preview-section">
+                            <div className="ns-preview-label">Required Skills</div>
+                            <div className="ns-preview-tags">
+                              {s.jdReqs.requiredSkills.slice(0,10).map((sk,i)=><span key={i} className="badge badge-green" style={{fontSize:10,padding:"2px 7px"}}>{sk}</span>)}
+                              {s.jdReqs.requiredSkills.length>10&&<span style={{fontSize:10,color:"var(--text3)"}}>+{s.jdReqs.requiredSkills.length-10} more</span>}
+                            </div>
+                          </div>
+                        )}
+                        {s.jdReqs.techStack?.length>0&&(
+                          <div className="ns-preview-section">
+                            <div className="ns-preview-label">Tech Stack</div>
+                            <div className="ns-preview-tags">
+                              {s.jdReqs.techStack.slice(0,8).map((t,i)=><span key={i} className="badge badge-purple" style={{fontSize:10,padding:"2px 7px"}}>{t}</span>)}
+                            </div>
+                          </div>
+                        )}
+                        {s.jdReqs.responsibilities?.length>0&&(
+                          <div className="ns-preview-section">
+                            <div className="ns-preview-label">Responsibilities</div>
+                            {s.jdReqs.responsibilities.slice(0,3).map((r,i)=><div key={i} style={{fontSize:12,color:"var(--text2)",marginBottom:3,paddingLeft:8,borderLeft:"2px solid var(--border2)"}}>· {r}</div>)}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Divider between JD and formula when both shown */}
+                    {(act===""||act==="both")&&s.jdReqs&&s.formula&&(
+                      <div style={{height:1,background:"var(--border)",margin:"4px 0 12px"}}/>
+                    )}
+
+                    {/* Formula section — show for "formula", "both", or nothing selected */}
+                    {(act===""||act==="formula"||act==="both")&&s.formula?.criteria&&(
+                      <div className="ns-preview-section">
+                        <div className="ns-preview-label">⚖️ Scoring Formula · {s.formula.criteria.reduce((t,c)=>t+c.maxPoints,0)} pts total</div>
+                        {[...s.formula.criteria].sort((a,b)=>b.maxPoints-a.maxPoints).map((c,i)=>(
+                          <div key={i} className="ns-formula-row">
+                            <span className="ns-formula-name">{c.name}</span>
+                            <div className="ns-formula-bar"><div className="ns-formula-fill" style={{width:c.maxPoints+"%"}}/></div>
+                            <span className="ns-formula-pts">{c.maxPoints}pt</span>
+                          </div>
+                        ))}
+                        {s.formula.rationale&&<p style={{fontSize:11,color:"var(--text3)",marginTop:6,lineHeight:1.45,fontStyle:"italic"}}>{s.formula.rationale}</p>}
+                      </div>
+                    )}
+
+                    {/* Contextual hint based on selection */}
+                    {act==="jd"&&<div style={{fontSize:11,color:"var(--text3)",marginTop:4,fontStyle:"italic"}}>ℹ️ Formula not reused — you'll set priorities from scratch in Step 3.</div>}
+                    {act==="formula"&&<div style={{fontSize:11,color:"var(--text3)",marginTop:4,fontStyle:"italic"}}>ℹ️ JD not reused — you'll upload or paste a new JD in Step 1.</div>}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Footer */}
+        <div className="ns-modal-foot">
+          <button className="ns-fresh-btn" onClick={()=>{onClose();onFresh();}}>
+            ✦ Start Completely Fresh
+          </button>
+          <button className="btn btn-ghost btn-sm" onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   MODAL: Duplicate Candidates
+══════════════════════════════════════════ */
+function DuplicateModal({duplicates,onConfirm,onClose}){
+  // duplicates: [{fileName, identity, matchInfo, include: bool}]
+  const [items,setItems]=useState(duplicates.map(d=>({...d,include:false})));
+  const toggle=(i)=>setItems(prev=>prev.map((x,j)=>j===i?{...x,include:!x.include}:x));
+  return(
+    <div className="modal-overlay" onClick={e=>e.target===e.currentTarget&&onClose()}>
+      <div className="modal" style={{maxWidth:560}}>
+        <div className="modal-title">⚠ Duplicate Candidates Detected</div>
+        <div className="modal-sub">{items.length} resume(s) match candidates from previous screenings (same name + phone number). By default they will be skipped. Toggle to include any for re-screening.</div>
+        <div style={{marginBottom:18}}>
+          {items.map((d,i)=>(
+            <div key={i} className={"dup-item"+(d.include?" flagged":"")}>
+              <div style={{flex:1}}>
+                <div style={{fontWeight:700,fontSize:13,color:"var(--text)",marginBottom:2}}>{d.identity.name||d.fileName}</div>
+                <div style={{fontSize:11,color:"var(--text3)",fontFamily:"'DM Mono',monospace"}}>{d.fileName}</div>
+                <div style={{fontSize:12,color:"var(--yellow)",marginTop:4}}>
+                  Previously screened in <strong>"{d.matchInfo.screeningTitle}"</strong> on {new Date(d.matchInfo.screeningDate).toLocaleDateString()}
+                  {d.matchInfo.score!=null&&<span> · scored {d.matchInfo.score}/100</span>}
+                </div>
+              </div>
+              <button className={"btn btn-sm "+(d.include?"btn-success":"btn-ghost")} onClick={()=>toggle(i)}>
+                {d.include?"Include ✓":"Skip"}
+              </button>
+            </div>
+          ))}
+        </div>
+        <div style={{display:"flex",gap:10,justifyContent:"flex-end"}}>
+          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+          <button className="btn btn-primary" onClick={()=>onConfirm(items)}>
+            Continue ({items.filter(d=>d.include).length} included, {items.filter(d=>!d.include).length} skipped)
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   STEP BAR
+══════════════════════════════════════════ */
+function StepBar({step}){
+  const steps=[{n:1,l:"Job Description"},{n:2,l:"Upload Resumes"},{n:3,l:"Scoring Formula"},{n:4,l:"Processing"},{n:5,l:"Results"}];
+  return(
+    <div className="step-bar">
+      {steps.map((s,i)=>(
+        <React.Fragment key={s.n}>
+          <div className={`step-dot${step===s.n?" active":step>s.n?" done":""}`}>
+            <div className="step-num">{step>s.n?"✓":s.n}</div>
+            <span className="step-label">{s.l}</span>
+          </div>
+          {i<steps.length-1&&<div className={`step-line${step>s.n?" done":""}`}/>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   FORMULA CARD
+══════════════════════════════════════════ */
+function FormulaCard({formula}){
+  if(!formula?.criteria) return null;
+  const total=formula.criteria.reduce((s,c)=>s+c.maxPoints,0);
+  return(
+    <div className="fade-in">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <span style={{fontSize:10,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",letterSpacing:"1px"}}>Scoring Formula</span>
+        <span className="badge badge-blue">{total} pts total</span>
+      </div>
+      {formula.criteria.sort((a,b)=>b.maxPoints-a.maxPoints).map(c=>(
+        <div key={c.key} className="f-row">
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+            <div style={{display:"flex",alignItems:"center",gap:6}}>
+              <span style={{fontWeight:700,fontSize:13,color:"var(--text)"}}>{c.name}</span>
+              {c.priority===1&&<span className="badge badge-blue" style={{fontSize:9}}>Top Priority</span>}
+            </div>
+            <span style={{fontFamily:"'DM Mono',monospace",fontSize:13,fontWeight:700,color:"var(--accent)"}}>{c.maxPoints} pts</span>
+          </div>
+          <div className="f-bar-track"><div className="f-bar-fill" style={{width:c.maxPoints+"%"}}/></div>
+          <p style={{fontSize:11,color:"var(--text2)",lineHeight:1.5,marginBottom:6}}>{c.rationale}</p>
+          <div style={{display:"flex",flexWrap:"wrap",gap:3}}>
+            {c.bands?.map((b,i)=><span key={i} className="f-band">{b.label}: {Math.round(b.multiplier*100)}%</span>)}
+          </div>
+        </div>
+      ))}
+      {formula.rationale&&<div className="info-box" style={{fontSize:12,marginTop:8}}>{formula.rationale}</div>}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   INTERVIEW QUESTIONS TAB (with add custom Q)
+══════════════════════════════════════════ */
+
+
+/* ══════════════════════════════════════════
+   LINKEDIN + NOTES TAB
+══════════════════════════════════════════ */
+function LinkedInNotesTab({cand,onUpdate}){
+  const [note,setNote]=useState(cand.hrNote||"");
+  const [saved,setSaved]=useState(false);
+
+  const linkedin=cand.parsedData?.linkedin||"";
+  // Try to normalise the URL
+  const linkedinUrl=linkedin
+    ? (linkedin.startsWith("http")?linkedin:"https://"+linkedin.replace(/^\/\//,""))
+    : null;
+
+  const saveNote=()=>{
+    onUpdate({...cand,hrNote:note});
+    setSaved(true);
+    setTimeout(()=>setSaved(false),2000);
+  };
+
+  return(
+    <div style={{display:"grid",gap:14}}>
+
+      {/* LinkedIn Section */}
+      <div>
+        <div style={{fontSize:10,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.8px",marginBottom:8}}>
+          LinkedIn Profile
+        </div>
+        {linkedinUrl?(
+          <div style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:9,padding:"12px 14px"}}>
+            <div style={{display:"flex",alignItems:"center",gap:10}}>
+              <div style={{width:36,height:36,borderRadius:8,background:"#0077B5",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <span style={{color:"#fff",fontSize:18,fontWeight:800}}>in</span>
+              </div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontWeight:600,fontSize:13,color:"var(--text)",marginBottom:2}}>
+                  {cand.parsedData?.name}
+                </div>
+                <div style={{fontSize:11,color:"var(--text3)",fontFamily:"'DM Mono',monospace",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+                  {linkedin}
+                </div>
+              </div>
+              <a
+                href={linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary btn-sm"
+                style={{textDecoration:"none",flexShrink:0}}
+              >
+                Open Profile ↗
+              </a>
+            </div>
+            <div style={{marginTop:10,padding:"8px 10px",background:"var(--accent-l)",border:"1px solid var(--accent-m)",borderRadius:7,fontSize:11,color:"var(--accent)"}}>
+              ℹ️ LinkedIn profiles require login to view. Click "Open Profile" to view in a new tab.
+            </div>
+          </div>
+        ):(
+          <div style={{background:"var(--surface)",border:"1px dashed var(--border2)",borderRadius:9,padding:"16px 14px",textAlign:"center"}}>
+            <div style={{fontSize:22,marginBottom:6}}>🔗</div>
+            <div style={{fontWeight:600,fontSize:13,color:"var(--text2)",marginBottom:3}}>No LinkedIn mentioned in resume</div>
+            <div style={{fontSize:11,color:"var(--text3)"}}>The candidate did not include a LinkedIn URL in their resume.</div>
+          </div>
+        )}
+      </div>
+
+      {/* HR Notes Section */}
+      <div>
+        <div style={{fontSize:10,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.8px",marginBottom:8}}>
+          HR Notes
+        </div>
+        <div style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:9,padding:"12px 14px"}}>
+          <textarea
+            className="input textarea"
+            style={{minHeight:100,fontSize:13,marginBottom:10,background:"var(--card)"}}
+            placeholder="Add your observations, interview notes, follow-up actions, or any private notes about this candidate..."
+            value={note}
+            onChange={e=>{setNote(e.target.value);setSaved(false);}}
+          />
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <button className="btn btn-primary btn-sm" onClick={saveNote} disabled={!note.trim()&&!cand.hrNote}>
+              {saved?"✓ Saved":"Save Note"}
+            </button>
+            {cand.hrNote&&note===cand.hrNote&&(
+              <span style={{fontSize:11,color:"var(--text3)"}}>Last saved note loaded</span>
+            )}
+            {saved&&(
+              <span style={{fontSize:11,color:"var(--green)",fontWeight:600}}>✓ Note saved</span>
+            )}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   CANDIDATE EXPAND PANEL
+══════════════════════════════════════════ */
+function CandPanel({cand,tab,setTab,isTop,onUpdate}){
+  const bd=cand.score?.breakdown||{};
+  const allSkills=[...(cand.parsedData?.skills?.technical||[]),...(cand.parsedData?.skills?.frameworks||[]),...(cand.parsedData?.skills?.tools||[]),...(cand.parsedData?.skills?.methodologies||[])];
+  const keys=["experience","skills_match","education","domain_match","certifications","projects_quality"];
+  const labels={experience:"Experience",skills_match:"Skills",education:"Education",domain_match:"Domain",certifications:"Certifications",projects_quality:"Projects"};
+  return(
+    <div className="exp-panel fade-in">
+      <div style={{display:"flex",gap:12,alignItems:"flex-start",marginBottom:14,flexWrap:"wrap"}}>
+        <div style={{flex:1}}>
+          <div style={{fontWeight:700,fontSize:15,color:"var(--text)"}}>{cand.parsedData?.name}</div>
+          <div style={{fontSize:11,color:"var(--text3)",fontFamily:"'DM Mono',monospace",marginTop:3}}>{cand.parsedData?.email} · {cand.parsedData?.phone}</div>
+          <div style={{display:"flex",gap:6,marginTop:5,flexWrap:"wrap"}}>
+            {cand.parsedData?.linkedin&&<span className="badge badge-blue" style={{fontSize:9}}>LinkedIn</span>}
+            {cand.parsedData?.github&&<span className="badge badge-gray" style={{fontSize:9}}>GitHub</span>}
+            {cand.parsedData?.location&&<span className="badge badge-gray" style={{fontSize:9}}>📍 {cand.parsedData.location}</span>}
+          </div>
+        </div>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center"}}>
+          <span className={isTop?"tier-top":"tier-bot"}>{isTop?"⭐ Top 50%":"Bottom 50%"}</span>
+          <span className={"score-badge "+sc(cand.score?.totalScore||0)}>{cand.score?.totalScore||0}</span>
+          <span className={"badge "+fc(cand.score?.fit)}>{cand.score?.fit}</span>
+          {cand.score?.hiringRecommendation&&<span className="badge badge-purple" style={{fontSize:10}}>{cand.score.hiringRecommendation}</span>}
+        </div>
+      </div>
+      {cand.score?.fitReason&&<div className="info-box" style={{marginBottom:12,fontSize:12}}>{cand.score.fitReason}</div>}
+      <div className="tabs">
+        <div className={"tab"+(tab==="bd"?" active":"")} onClick={()=>setTab("bd")}>Score Breakdown</div>
+        <div className={"tab"+(tab==="det"?" active":"")} onClick={()=>setTab("det")}>Full Profile</div>
+        <div className={"tab"+(tab==="linkedin"?" active":"")} onClick={()=>setTab("linkedin")}>LinkedIn &amp; Notes</div>
+        {!isTop&&<div className={"tab"+(tab==="roles"?" active":"")} onClick={()=>setTab("roles")}>Suggested Roles</div>}
+      </div>
+
+      {tab==="bd"&&<div>
+        <div className="bd-grid">
+          {keys.map(k=>{const it=bd[k];if(!it)return null;return(
+            <div key={k} className="bd-item">
+              <div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:4}}>{labels[k]}</div>
+              <div style={{fontFamily:"'DM Mono',monospace",fontSize:18,fontWeight:700,color:"var(--accent)"}}>{it.score}<span style={{fontSize:11,color:"var(--text3)",fontWeight:400}}>/{it.max}</span></div>
+              {it.band&&<div style={{fontSize:9,color:"var(--yellow)",fontFamily:"'DM Mono',monospace",marginTop:2,fontWeight:600}}>{it.band}</div>}
+              <div style={{fontSize:11,color:"var(--text2)",marginTop:4,lineHeight:1.45}}>{it.reason}</div>
+              {k==="skills_match"&&<>
+                {it.matched?.length>0&&<div style={{marginTop:5,display:"flex",flexWrap:"wrap",gap:2}}>{it.matched.slice(0,6).map((s,i)=><span key={i} className="badge badge-green" style={{fontSize:9,padding:"1px 5px"}}>{s}</span>)}</div>}
+                {it.missing?.length>0&&<div style={{marginTop:3,display:"flex",flexWrap:"wrap",gap:2}}>{it.missing.slice(0,5).map((s,i)=><span key={i} className="badge badge-red" style={{fontSize:9,padding:"1px 5px"}}>{s}</span>)}</div>}
+              </>}
+            </div>
+          );})}
+        </div>
+        <div style={{marginTop:12,display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+          <div style={{background:"var(--green-l)",border:"1px solid var(--green-m)",borderRadius:9,padding:"10px 12px"}}>
+            <div style={{fontSize:10,color:"var(--green)",fontWeight:700,marginBottom:6,textTransform:"uppercase",letterSpacing:"0.5px"}}>✓ Strengths</div>
+            {(cand.score?.strengths||[]).map((s,i)=><div key={i} style={{fontSize:12,color:"var(--green)",marginBottom:3,paddingLeft:8,borderLeft:"2px solid var(--green)",opacity:0.85}}>· {s}</div>)}
+          </div>
+          <div style={{background:"var(--red-l)",border:"1px solid var(--red)",borderRadius:9,padding:"10px 12px"}}>
+            <div style={{fontSize:10,color:"var(--red)",fontWeight:700,marginBottom:6,textTransform:"uppercase",letterSpacing:"0.5px"}}>✗ Gaps</div>
+            {(cand.score?.gaps||[]).map((s,i)=><div key={i} style={{fontSize:12,color:"var(--red)",marginBottom:3,paddingLeft:8,borderLeft:"2px solid var(--red)",opacity:0.85}}>· {s}</div>)}
+          </div>
+        </div>
+      </div>}
+
+      {tab==="det"&&<div style={{display:"grid",gap:12}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+          <div>
+            <div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",marginBottom:6}}>Inferred Domain</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:6}}>
+              {(cand.parsedData?.allDomains||[cand.parsedData?.inferredDomain]).filter(Boolean).map((d,i)=><span key={i} className={"badge "+(i===0?"badge-blue":"badge-gray")} style={{fontSize:10}}>{d}{i===0?" ★":""}</span>)}
+            </div>
+            <div style={{fontSize:11,color:"var(--text2)",lineHeight:1.55,background:"var(--surface)",borderRadius:7,padding:"7px 9px"}}>{cand.parsedData?.domainEvidence}</div>
+          </div>
+          <div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",marginBottom:5}}>Experience</div><div style={{fontSize:22,fontWeight:800,fontFamily:"'DM Mono',monospace",color:"var(--accent)"}}>{cand.parsedData?.totalExperience}<span style={{fontSize:12,color:"var(--text3)",fontWeight:400}}> yrs</span></div><div style={{fontSize:12,color:"var(--text2)"}}>{cand.parsedData?.currentRole} @ {cand.parsedData?.currentCompany}</div></div>
+        </div>
+        {cand.parsedData?.keyStrengths?.length>0&&<div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",marginBottom:5}}>Key Strengths</div><div style={{display:"flex",flexWrap:"wrap",gap:4}}>{cand.parsedData.keyStrengths.map((s,i)=><span key={i} className="badge badge-green" style={{fontSize:10}}>{s}</span>)}</div></div>}
+        <div>
+          <div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",marginBottom:7}}>Skills</div>
+          {/* Show skill depth if available, otherwise plain list */}
+          {(cand.parsedData?.skillDepth||[]).length>0?(
+            <div>
+              {/* Expert skills */}
+              {cand.parsedData.skillDepth.filter(s=>s.depth==="expert").length>0&&<div style={{marginBottom:6}}>
+                <span style={{fontSize:9,color:"var(--green)",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.5px"}}>Expert</span>
+                <div style={{display:"flex",flexWrap:"wrap",gap:3,marginTop:3}}>{cand.parsedData.skillDepth.filter(s=>s.depth==="expert").map((s,i)=><span key={i} className="badge badge-green" style={{fontSize:10}} title={s.evidenceFrom}>{s.skill}</span>)}</div>
+              </div>}
+              {/* Working knowledge */}
+              {cand.parsedData.skillDepth.filter(s=>s.depth==="working").length>0&&<div style={{marginBottom:6}}>
+                <span style={{fontSize:9,color:"var(--accent)",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.5px"}}>Working Knowledge</span>
+                <div style={{display:"flex",flexWrap:"wrap",gap:3,marginTop:3}}>{cand.parsedData.skillDepth.filter(s=>s.depth==="working").map((s,i)=><span key={i} className="badge badge-blue" style={{fontSize:10}} title={s.evidenceFrom}>{s.skill}</span>)}</div>
+              </div>}
+              {/* Exposure */}
+              {cand.parsedData.skillDepth.filter(s=>s.depth==="exposure").length>0&&<div style={{marginBottom:6}}>
+                <span style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.5px"}}>Exposure</span>
+                <div style={{display:"flex",flexWrap:"wrap",gap:3,marginTop:3}}>{cand.parsedData.skillDepth.filter(s=>s.depth==="exposure").map((s,i)=><span key={i} className="badge badge-gray" style={{fontSize:10}} title={s.evidenceFrom}>{s.skill}</span>)}</div>
+              </div>}
+              {/* Remaining skills without depth */}
+              {allSkills.filter(s=>!cand.parsedData.skillDepth.some(d=>d.skill?.toLowerCase()===s.toLowerCase())).length>0&&<div>
+                <span style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.5px"}}>Also mentioned</span>
+                <div style={{display:"flex",flexWrap:"wrap",gap:3,marginTop:3}}>{allSkills.filter(s=>!cand.parsedData.skillDepth.some(d=>d.skill?.toLowerCase()===s.toLowerCase())).slice(0,15).map((s,i)=><span key={i} className="badge badge-gray" style={{fontSize:9,padding:"1px 5px"}}>{s}</span>)}</div>
+              </div>}
+            </div>
+          ):(
+            <div style={{display:"flex",flexWrap:"wrap",gap:4}}>{allSkills.slice(0,22).map((s,i)=><span key={i} className="badge badge-blue" style={{fontSize:10}}>{s}</span>)}</div>
+          )}
+        </div>
+        <div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",marginBottom:5}}>Education</div>{(cand.parsedData?.education||[]).map((e,i)=><div key={i} style={{fontSize:12,color:"var(--text)",marginBottom:3}}>{e.degree} in {e.field} · {e.institution}{e.year?" ("+e.year+")":""}{e.gpa?" · GPA: "+e.gpa:""}</div>)}</div>
+        {(cand.parsedData?.certifications||[]).length>0&&<div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",marginBottom:5}}>Certifications</div><div style={{display:"flex",flexWrap:"wrap",gap:4}}>{cand.parsedData.certifications.map((c,i)=><span key={i} className="badge badge-yellow" style={{fontSize:10}}>{c}</span>)}</div></div>}
+        <div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",marginBottom:5}}>Projects</div>{(cand.parsedData?.projects||[]).slice(0,4).map((p,i)=><div key={i} style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:8,padding:"9px 11px",marginBottom:6}}><div style={{fontWeight:700,fontSize:13,color:"var(--text)"}}>{p.name}{p.url&&<a href={p.url} target="_blank" style={{marginLeft:6,fontSize:10,color:"var(--accent)"}}>↗</a>}</div><div style={{fontSize:12,color:"var(--text2)",marginTop:2,lineHeight:1.45}}>{p.description}</div>{p.impact&&<div style={{fontSize:11,color:"var(--green)",marginTop:3,fontWeight:600}}>Impact: {p.impact}</div>}<div style={{display:"flex",flexWrap:"wrap",gap:3,marginTop:5}}>{(p.technologies||[]).map((t,j)=><span key={j} className="badge badge-purple" style={{fontSize:9,padding:"1px 5px"}}>{t}</span>)}</div></div>)}</div>
+        <div><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",marginBottom:5}}>Work History</div>{(cand.parsedData?.experience||[]).slice(0,5).map((e,i)=><div key={i} style={{borderLeft:"3px solid var(--border2)",paddingLeft:11,marginBottom:12}}><div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:8,flexWrap:"wrap"}}>
+                        <div style={{fontWeight:700,fontSize:13,color:"var(--text)"}}>{e.role}</div>
+                        <div style={{display:"flex",gap:4,flexShrink:0}}>
+                          {e.roleDomain&&<span className="badge badge-purple" style={{fontSize:9}}>{e.roleDomain}</span>}
+                          {e.depthLevel&&<span className={"badge "+(e.depthLevel.includes("expert")?"badge-green":e.depthLevel.includes("working")?"badge-blue":"badge-gray")} style={{fontSize:9}}>{e.depthLevel}</span>}
+                        </div>
+                      </div>
+                      <div style={{fontSize:12,color:"var(--accent)",marginTop:1}}>{e.company}{e.from?" · "+e.from+(e.to?" – "+e.to:""):e.years?" · "+e.years+"yr":""}</div>
+                      {e.actualWork&&<div style={{fontSize:11,color:"var(--text2)",marginTop:4,background:"var(--surface)",borderRadius:5,padding:"5px 8px",lineHeight:1.45,fontStyle:"italic"}}>🔍 {e.actualWork}</div>}{e.achievements?.length>0&&<div style={{marginTop:5}}>{e.achievements.slice(0,2).map((a,j)=><div key={j} style={{fontSize:11,color:"var(--text2)",marginBottom:2}}>• {a}</div>)}</div>}<div style={{display:"flex",flexWrap:"wrap",gap:3,marginTop:4}}>{(e.technologies||[]).slice(0,8).map((t,j)=><span key={j} className="badge badge-gray" style={{fontSize:9,padding:"1px 5px"}}>{t}</span>)}</div></div>)}</div>
+        {cand.parsedData?.redFlags?.length>0&&<div className="warn-box" style={{fontSize:12}}><strong>⚠ Notes:</strong> {cand.parsedData.redFlags.join(" · ")}</div>}
+        {cand.parsedData?._parseWarning&&<div className="warn-box" style={{fontSize:12,marginTop:6}}><strong>⚠ Parse Warning:</strong> {cand.parsedData._parseWarning}</div>}
+      </div>}
+
+      {tab==="linkedin"&&<LinkedInNotesTab cand={cand} onUpdate={onUpdate}/>}
+
+      {tab==="roles"&&!isTop&&<div>
+        {cand.suggestedRoles?.candidateSummary&&<div className="info-box" style={{marginBottom:10,fontSize:13}}>{cand.suggestedRoles.candidateSummary}</div>}
+        {cand.suggestedRoles?.primaryStrength&&<div className="success-box" style={{marginBottom:10,fontSize:13}}>💡 {cand.suggestedRoles.primaryStrength}</div>}
+        {(cand.suggestedRoles?.suggestedRoles||[]).map((r,i)=>(
+          <div key={i} className="role-item">
+            <div style={{flex:1}}>
+              <div style={{fontWeight:700,fontSize:14,color:"var(--text)"}}>{r.title}</div>
+              <div style={{fontSize:11,color:"var(--accent)",fontFamily:"'DM Mono',monospace",marginBottom:4}}>{r.domain}</div>
+              <div style={{fontSize:12,color:"var(--text2)",lineHeight:1.5}}>{r.reason}</div>
+              {r.keySkillsTheyHave?.length>0&&<div style={{marginTop:5,display:"flex",flexWrap:"wrap",gap:3}}>{r.keySkillsTheyHave.slice(0,5).map((s,j)=><span key={j} className="badge badge-green" style={{fontSize:9,padding:"1px 5px"}}>{s}</span>)}</div>}
+              {r.gapToClose&&<div style={{fontSize:11,color:"var(--yellow)",marginTop:4}}>🎯 To develop: {r.gapToClose}</div>}
+            </div>
+            <span className={"badge "+(r.matchStrength==="Strong"?"badge-green":r.matchStrength==="Good"?"badge-blue":"badge-yellow")} style={{flexShrink:0}}>{r.matchStrength}</span>
+          </div>
+        ))}
+      </div>}
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   SCREENING CARD
+══════════════════════════════════════════ */
+function SCard({s,user,onClick,onExport,onDelete}){
+  const isMe=s.createdByEmail===user?.email;
+  const avg=s.candidates?.length?Math.round(s.candidates.reduce((a,c)=>a+(c.score?.totalScore||0),0)/s.candidates.length):0;
+  const handleDelete=(e)=>{
+    e.stopPropagation();
+    if(window.confirm('Delete "'+s.jdTitle+'"?\n\nThis will permanently remove this screening and all its candidate data from the database. This cannot be undone.'))
+      onDelete();
+  };
+  return(
+    <div className="scard" onClick={onClick}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:10}}>
+        <div style={{flex:1}}>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:5,flexWrap:"wrap"}}>
+            <span style={{fontWeight:700,fontSize:14,color:"var(--text)"}}>{s.jdTitle}</span>
+            <div className="creator-pill" style={{background:isMe?"var(--green-l)":"var(--purple-l)",border:"1px solid "+(isMe?"var(--green-m)":"var(--purple)"),color:isMe?"var(--green)":"var(--purple)"}}>
+              <span style={{width:5,height:5,borderRadius:"50%",background:"currentColor",display:"inline-block"}}/>
+              {s.createdByEmail?.split("@")[0]}{isMe?" (you)":""}
+            </div>
+          </div>
+          <div style={{fontSize:11,color:"var(--text3)",fontFamily:"'DM Mono',monospace",marginBottom:7}}>{new Date(s.createdAt).toLocaleString()} · {s.candidates?.length||0} candidates · avg {avg}/100</div>
+          <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
+            {s.jdReqs?.domain&&<span className="badge badge-blue" style={{fontSize:10}}>{s.jdReqs.domain}</span>}
+            {s.jdReqs?.seniority&&<span className="badge badge-purple" style={{fontSize:10}}>{s.jdReqs.seniority}</span>}
+            {s.jdReqs?.experienceRange&&<span className="badge badge-gray" style={{fontSize:10}}>{s.jdReqs.experienceRange.min}-{s.jdReqs.experienceRange.max}yr exp</span>}
+          </div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5}}>
+          <span className="badge badge-green" style={{fontSize:10}}>completed</span>
+          {onExport&&<button className="btn btn-ghost btn-xs" onClick={e=>{e.stopPropagation();onExport();}}>↓ CSV</button>}
+          {isMe&&onDelete&&<button className="btn btn-xs" style={{background:"var(--red-l)",color:"var(--red)",border:"1px solid var(--red)",fontSize:10}} onClick={handleDelete}>🗑 Delete</button>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   MAIN APP
+══════════════════════════════════════════ */
+function App(){
+  /* theme */
+  const [theme,setTheme]=useState(()=>localStorage.getItem("tiq_theme")||"light");
+  useEffect(()=>{document.documentElement.setAttribute("data-theme",theme);localStorage.setItem("tiq_theme",theme);},[theme]);
+  const toggleTheme=()=>setTheme(t=>t==="light"?"dark":"light");
+
+  /* auth */
+  const [user,setUser]=useState(null);
+  const [authLoading,setAuthLoading]=useState(true);
+  useEffect(()=>{
+    const c=sb();
+    if(!c){setAuthLoading(false);return;}
+    c.auth.getSession().then(({data})=>{setUser(data.session?.user||null);setAuthLoading(false);});
+    const{data:{subscription}}=c.auth.onAuthStateChange((_,s)=>setUser(s?.user||null));
+    return()=>subscription.unsubscribe();
+  },[]);
+  const logout=async()=>{await sb()?.auth.signOut();_sb=null;setUser(null);};
+
+  /* navigation & screenings */
+  const [view,setView]=useState("dashboard");
+  const [screenings,setScreenings]=useState([]);
+  const [loadingSc,setLoadingSc]=useState(false);
+
+  /* screening flow */
+  const [step,setStep]=useState(1);
+  const [jdFile,setJdFile]=useState(null),[jdText,setJdText]=useState(""),[jdMode,setJdMode]=useState("file");
+  const [jdExtracting,setJdExtracting]=useState(false),[jdReqs,setJdReqs]=useState(null);
+  const jdFileRef=useRef();
+  const [resumeFiles,setResumeFiles]=useState([]),[candidates,setCandidates]=useState([]);
+  const [dragging,setDragging]=useState(false); const resumeRef=useRef();
+
+  /* formula & chat — chatHistory holds full conversation for memory */
+  const [formula,setFormula]=useState(null),[fApproved,setFApproved]=useState(false);
+  const [chatHistory,setChatHistory]=useState([]); // [{role,content}] — the memory
+  const [chatDisplay,setChatDisplay]=useState([]); // [{role,content,ts}] — UI display
+  const [chatInput,setChatInput]=useState("");
+  const chatRef=useRef();
+
+  /* processing */
+  const [loading,setLoading]=useState(false),[loadMsg,setLoadMsg]=useState("");
+  const [prog,setProg]=useState({done:0,total:0,phase:""});
+
+  /* results */
+  const [selCand,setSelCand]=useState(null),[candTab,setCandTab]=useState("bd");
+
+  /* settings */
+  const [sbUrlI,setSbUrlI]=useState(localStorage.getItem("tiq_sb_url")||"");
+  const [sbAnonI,setSbAnonI]=useState(localStorage.getItem("tiq_sb_anon")||"");
+
+  /* modals */
+  const [showNewModal,setShowNewModal]=useState(false);
+  const [dupModal,setDupModal]=useState(null); // {duplicates, texts, onConfirm}
+
+  useEffect(()=>{if(user){loadAll();}},[user]);
+  useEffect(()=>{if(chatRef.current) chatRef.current.scrollTop=chatRef.current.scrollHeight;},[chatDisplay]);
+
+  const loadAll=async()=>{setLoadingSc(true);const s=await dbLoad();setScreenings(s);setLoadingSc(false);};
+  const handleDelete=async(id)=>{
+    try{
+      await dbDelete(id);
+      setScreenings(prev=>prev.filter(s=>s.id!==id));
+    }catch(e){alert("Delete failed: "+e.message);}
+  };
+  const nav=(v)=>{setView(v);if(["dashboard","history","team"].includes(v))loadAll();};
+  const saveSb=()=>{localStorage.setItem("tiq_sb_url",sbUrlI);localStorage.setItem("tiq_sb_anon",sbAnonI);_sb=null;alert("Saved. Reload to reconnect.");};
+
+  const reset=()=>{
+    setStep(1);setJdFile(null);setJdText("");setJdReqs(null);
+    setResumeFiles([]);setCandidates([]);setFormula(null);setFApproved(false);
+    setChatHistory([]);setChatDisplay([]);setChatInput("");
+    setLoading(false);setSelCand(null);setProg({done:0,total:0,phase:""});
+  };
+
+  /* clicking + New Screening */
+  const handleNewScreening=()=>{
+    reset();
+    if(screenings.length>0) setShowNewModal(true);
+    else{setView("new");}
+  };
+  const handleFresh=()=>{setShowNewModal(false);reset();setView("new");};
+
+  const handlePrevSelect=(scrn,what)=>{
+    reset();
+    // Load whatever was selected
+    if(what==="jd"||what==="both"){
+      setJdReqs(scrn.jdReqs);
+      setJdText("[Loaded from: "+scrn.jdTitle+"]");
+    }
+    if(what==="formula"||what==="both") setFormula(scrn.formula);
+    // ALWAYS land on Step 2 — HR must upload new resumes every time
+    setStep(2);
+    // Pre-fill chat for formula step
+    if(what==="both"||what==="formula"){
+      const weights=(scrn.formula?.criteria||[])
+        .slice().sort((a,b)=>b.maxPoints-a.maxPoints)
+        .map(c=>c.name+": "+c.maxPoints+"pts").join(" · ");
+      const line1=(what==="both")
+        ?"JD loaded: "+scrn.jdReqs?.jobTitle+" ("+scrn.jdReqs?.domain+") · "+scrn.jdReqs?.experienceRange?.min+"-"+scrn.jdReqs?.experienceRange?.max+"yr\n"
+        :"";
+      const line2="Formula weights: "+weights;
+      const initMsg={role:"assistant",content:"Loaded "+(what==="both"?"JD + formula":"formula")+" from \""+scrn.jdTitle+"\"\n\n"+line1+line2+"\n\nUpload your new resumes below. After parsing you can refine the formula or approve it as-is."};
+      setChatDisplay([initMsg]);
+      setChatHistory([{role:"assistant",content:initMsg.content}]);
+    }
+    setView("new");
+  };
+
+  /* JD file handling */
+  const handleJdFile=async(file)=>{
+    const n=file.name.toLowerCase();
+    if(!n.endsWith(".pdf")&&!n.endsWith(".docx")&&!n.endsWith(".doc")&&!n.endsWith(".txt")){alert("Please upload PDF, DOCX, DOC, or TXT.");return;}
+    setJdFile(file);setJdExtracting(true);
+    try{setJdText(await readFile(file));}catch(e){alert("Could not extract: "+e.message);}
+    setJdExtracting(false);
+  };
+
+  const handleAnalyzeJD=async()=>{
+    if(!jdText.trim()) return;
+    setLoading(true);setLoadMsg("Analyzing job description...");
+    try{setJdReqs(await analyzeJD(jdText));}catch(e){alert("Error: "+e.message);}
+    setLoading(false);setLoadMsg("");
+  };
+
+  const handleResumeFiles=(files)=>{
+    const arr=Array.from(files).filter(f=>{const n=f.name.toLowerCase();return n.endsWith(".pdf")||n.endsWith(".txt")||n.endsWith(".doc")||n.endsWith(".docx");});
+    setResumeFiles(prev=>{const ex=new Set(prev.map(f=>f.name));return[...prev,...arr.filter(f=>!ex.has(f.name))].slice(0,30);});
+  };
+
+  /* Parse resumes with duplicate detection against Supabase history */
+  const handleParseResumes=async()=>{
+    if(!resumeFiles.length) return;
+    setLoading(true);
+
+    // Step 1: Extract text
+    setProg({done:0,total:resumeFiles.length,phase:"Extracting text from files..."});
+    const texts=[];
+    for(let i=0;i<resumeFiles.length;i++){
+      let t="";try{t=await readFile(resumeFiles[i]);}catch{}
+      texts.push({file:resumeFiles[i],text:t});
+      setProg({done:i+1,total:resumeFiles.length,phase:"Extracting text..."});
+    }
+
+    // Step 2: Quick identity extraction for duplicate check
+    setProg({done:0,total:texts.length,phase:"Checking for duplicates against history..."});
+    const identities=await batch(texts,async({text},idx)=>{
+      const id=await quickExtractIdentity(text);
+      setProg(p=>({...p,done:idx+1}));
+      return id;
+    },5);
+
+    // Step 3: Check against ALL existing screenings
+    const dupFound=[];
+    texts.forEach(({file},i)=>{
+      const id=identities[i];
+      const match=findDuplicateInHistory(id,screenings);
+      if(match) dupFound.push({fileName:file.name,identity:id,matchInfo:match,fileIndex:i});
+    });
+
+    setLoading(false);
+
+    // Step 4: If duplicates found, show modal
+    if(dupFound.length>0){
+      setDupModal({
+        duplicates:dupFound,
+        texts,
+        onConfirm:async(resolvedDups)=>{
+          setDupModal(null);
+          const skipSet=new Set(resolvedDups.filter(d=>!d.include).map(d=>d.fileIndex));
+          const filtered=texts.filter((_,i)=>!skipSet.has(i));
+          await doParseResumes(filtered);
+        },
+        onClose:()=>{setDupModal(null);}
+      });
+    }else{
+      await doParseResumes(texts);
+    }
+  };
+
+  /* actual full parse after duplicate resolution */
+  const doParseResumes=async(texts)=>{
+    setLoading(true);
+    setProg({done:0,total:texts.length,phase:"Parsing resumes — 1 min gap to stay within rate limits..."});
+
+    // Track if daily quota is exhausted — stop early and skip remaining
+    let quotaExhausted=false;
+    const isQuotaErr=(msg)=>msg&&(
+      msg.toLowerCase().includes("exceeded your current quota")||
+      msg.toLowerCase().includes("quota")||
+      msg.toLowerCase().includes("tpd")||
+      msg.toLowerCase().includes("tokens per day")
+    );
+    const cleanFileName=(name)=>{
+      let n=name
+        .replace(/^Naukri_/i,"")          // strip Naukri_ prefix
+        .replace(/_\d+y_\d+m_?\.pdf$/i,"") // strip _2y_0m_.pdf suffix
+        .replace(/\.pdf$/i,"")             // strip .pdf
+        .replace(/_/g," ")                 // underscores to spaces
+        .replace(/\[\d+y\s*\d*m?\]/g,"")  // strip [2y 0m] experience tags
+        .replace(/\s{2,}/g," ")            // collapse spaces
+        .trim();
+      // Capitalise first letter of each word
+      return n.replace(/\b\w/g,c=>c.toUpperCase());
+    };
+
+    const allParsed=await batch(texts,async({file,text},idx)=>{
+      // Always return SOMETHING — no single resume should block the whole batch
+      const fallback=(warning)=>({
+        id:"c"+Date.now()+"_"+idx,fileName:file.name,
+        parsedData:{
+          name:cleanFileName(file.name),email:"N/A",phone:"N/A",totalExperience:0,
+          currentRole:"",currentCompany:"",
+          skills:{technical:[],tools:[],languages:[],frameworks:[],databases:[],cloud:[],soft:[],methodologies:[]},
+          experience:[],projects:[],certifications:[],skillDepth:[],
+          inferredDomain:"Unknown",allDomains:[],careerLevel:"Unknown",
+          keyStrengths:[],redFlags:[],_parseWarning:warning
+        }
+      });
+
+      // Skip if daily quota already gone
+      if(quotaExhausted) return fallback("Skipped — daily token quota exhausted. Try again tomorrow.");
+
+      // TIER 1: Full deep parse (7000 chars, full schema)
+      try{
+        const p=await parseResume(text);
+        if(!p.name||p.name==="N/A"||p.name.length<2) p.name=cleanFileName(file.name);
+        p.skills=p.skills||{};
+        ["technical","tools","languages","frameworks","databases","cloud","soft","methodologies"]
+          .forEach(k=>{if(!Array.isArray(p.skills[k]))p.skills[k]=[];});
+        p.experience=Array.isArray(p.experience)?p.experience:[];
+        p.skillDepth=Array.isArray(p.skillDepth)?p.skillDepth:[];
+        return{id:"c"+Date.now()+"_"+idx,fileName:file.name,parsedData:p};
+      }catch(e1){
+        console.warn("Tier 1 parse failed for",file.name,":",e1.message);
+        if(isQuotaErr(e1.message)){quotaExhausted=true;return fallback("Daily token quota exhausted.");}
+
+        // TIER 2: Lean parse — 3500 chars, minimal schema, still gets core info
+        try{
+          await new Promise(r=>setTimeout(r,20000)); // wait 20s before Tier 2 retry
+          const lean=await aiOpenai(
+            "You are a resume parser. Extract key info. Return ONLY valid JSON.",
+            "Parse this resume.\n\nRESUME:\n"+text.slice(0,3500)+"\n\nReturn JSON:\n{\"name\":\"\",\"email\":\"\",\"phone\":\"\",\"totalExperience\":0,\"currentRole\":\"\",\"currentCompany\":\"\",\"inferredDomain\":\"\",\"experience\":[{\"company\":\"\",\"role\":\"\",\"years\":0,\"technologies\":[],\"actualWork\":\"\",\"roleDomain\":\"\"}],\"skills\":{\"technical\":[],\"tools\":[],\"languages\":[],\"frameworks\":[]},\"certifications\":[],\"keyStrengths\":[]}",
+            1500,0.1
+          );
+          const p=toJ(lean);
+          if(!p.name||p.name.length<2) p.name=cleanFileName(file.name);
+          p.skills=p.skills||{};
+          ["technical","tools","languages","frameworks","databases","cloud","soft","methodologies"]
+            .forEach(k=>{if(!Array.isArray(p.skills[k]))p.skills[k]=[];});
+          p.experience=Array.isArray(p.experience)?p.experience:[];
+          p.skillDepth=[];p.allDomains=[p.inferredDomain].filter(Boolean);
+          p._parseWarning="Simplified parse — some depth details may be missing";
+          return{id:"c"+Date.now()+"_"+idx,fileName:file.name,parsedData:p};
+        }catch(e2){
+          console.warn("Tier 2 parse failed for",file.name,":",e2.message);
+          if(isQuotaErr(e2.message)){quotaExhausted=true;return fallback("Daily token quota exhausted.");}
+
+          // TIER 3: Absolute minimum — just name, years, skills list
+          try{
+            await new Promise(r=>setTimeout(r,40000)); // wait 40s before Tier 3
+            const mini=await aiOpenai(
+              "Extract info from this resume. JSON only.",
+              "Resume:\n"+text.slice(0,2000)+"\n\nReturn:{\"name\":\"\",\"email\":\"\",\"phone\":\"\",\"totalExperience\":0,\"skills\":[],\"currentRole\":\"\"}",
+              500,0
+            );
+            const raw=toJ(mini);
+            const skills=Array.isArray(raw.skills)?raw.skills:[];
+            return{id:"c"+Date.now()+"_"+idx,fileName:file.name,parsedData:{
+              name:raw.name||cleanFileName(file.name),
+              email:raw.email||"N/A",phone:raw.phone||"N/A",
+              totalExperience:raw.totalExperience||0,
+              currentRole:raw.currentRole||"",currentCompany:"",
+              skills:{technical:skills,tools:[],languages:[],frameworks:[],databases:[],cloud:[],soft:[],methodologies:[]},
+              experience:[],projects:[],certifications:[],skillDepth:[],
+              inferredDomain:"",allDomains:[],careerLevel:"Unknown",keyStrengths:[],redFlags:[],
+              _parseWarning:"Minimal parse (Tier 3) — only basic info extracted."
+            }};
+          }catch(e3){
+            if(isQuotaErr(e3.message)) quotaExhausted=true;
+            return fallback("All parse attempts failed: "+e3.message.slice(0,80));
+          }
+        }
+      }
+    },1,(d,t)=>setProg({done:d,total:t,phase:"Parsing resumes..."}),60000);
+
+
+    // In-batch dedup (same name+phone within this upload)
+    const deduped=[];let dupCount=0;
+    const normPhone=p=>(p||"").replace(/\D/g,"").slice(-10);
+    const normName=n=>(n||"").toLowerCase().replace(/\s+/g," ").trim();
+    for(const cand of allParsed){
+      const ph=normPhone(cand.parsedData?.phone),nm=normName(cand.parsedData?.name);
+      const isDup=deduped.some(e=>ph&&normPhone(e.parsedData?.phone)===ph&&nm&&normName(e.parsedData?.name)===nm);
+      if(isDup){const ex=deduped.find(e=>normPhone(e.parsedData?.phone)===ph&&normName(e.parsedData?.name)===nm);if(ex)ex.duplicateFiles=[...(ex.duplicateFiles||[]),cand.fileName];dupCount++;}
+      else deduped.push(cand);
+    }
+
+    if(deduped.length===0){
+      setLoading(false);
+      // All resumes were either duplicates or failed — stop and notify
+      alert("⚠ No resumes to screen.\n\nAll " + allParsed.length + " uploaded resume(s) were identified as duplicates of candidates already in your screening history.\n\nPlease upload new resumes to continue.");
+      setStep(2); // stay on upload step
+      return;
+    }
+    setCandidates(deduped);setLoading(false);setStep(3);
+    const dupMsg=dupCount>0?`\n\n⚠️ ${dupCount} duplicate(s) within this batch also removed.`:"";
+    const initMsg=`✅ Successfully parsed ${deduped.length} resumes with deep extraction!${dupMsg}\n\nNow let's design the scoring formula for **${jdReqs.jobTitle}**.\n\nDescribe your priorities — I'll remember everything you say across messages:\n\n• "Experience and skills are most important, equally weighted"\n• "Keep projects, skills, and experience at same top priority"\n• "Experience first, then skills, education is secondary"\n\nDistribute 100 pts across: Work Experience · Skills Match · Domain Match · Education · Projects · Certifications`;
+    setChatDisplay([{role:"assistant",content:initMsg,ts:new Date().toISOString()}]);
+    setChatHistory([{role:"assistant",content:initMsg}]);
+  };
+
+  /* Chat — accumulates history for model memory */
+  const sendChat=async()=>{
+    if(!chatInput.trim()||loading) return;
+    const msg=chatInput.trim();setChatInput("");
+
+    const newHistory=[...chatHistory,{role:"user",content:msg}];
+    const newDisplay=[...chatDisplay,{role:"user",content:msg,ts:new Date().toISOString()}];
+    setChatHistory(newHistory);setChatDisplay(newDisplay);
+    setLoading(true);setLoadMsg("Designing formula with memory...");
+
+    try{
+      const f=await buildFormula(jdReqs,newHistory,formula||null);
+      setFormula(f);
+      const reply=`Here's the updated formula based on everything you've told me so far.\n\nTotal: ${f.criteria?.reduce((s,c)=>s+c.maxPoints,0)||0}/100 points\nTop criteria: ${f.criteria?.sort((a,b)=>b.maxPoints-a.maxPoints).slice(0,3).map(c=>c.name+" ("+c.maxPoints+"pts)").join(", ")}\n\nReview on the left — approve to start scoring, or keep refining.`;
+      const updatedHistory=[...newHistory,{role:"assistant",content:reply}];
+      const updatedDisplay=[...newDisplay,{role:"assistant",content:reply,ts:new Date().toISOString()}];
+      setChatHistory(updatedHistory);setChatDisplay(updatedDisplay);
+    }catch(e){
+      const errMsg="Error: "+e.message;
+      setChatHistory([...newHistory,{role:"assistant",content:errMsg}]);
+      setChatDisplay([...newDisplay,{role:"assistant",content:errMsg,ts:new Date().toISOString()}]);
+    }
+    setLoading(false);setLoadMsg("");
+  };
+
+  const approveFormula=async()=>{
+    setFApproved(true);
+    const msg="✅ Formula approved! Scoring all "+candidates.length+" candidates now — this may take a few minutes...";
+    setChatDisplay(p=>[...p,{role:"assistant",content:msg,ts:new Date().toISOString()}]);
+    setStep(4);await runScoring();
+  };
+
+  const runScoring=async()=>{
+    setLoading(true);
+    setProg({done:0,total:candidates.length,phase:"Scoring candidates..."});
+    const scored=await batch(candidates,async(cand)=>{
+      try{return{...cand,score:await scoreOne(cand,formula,jdReqs)};}
+      catch(e){
+        console.warn("Score failed for",cand.parsedData?.name,":",e?.message);
+        return{...cand,score:{totalScore:0,breakdown:{},strengths:[],gaps:["Scoring failed: "+( e?.message||"unknown error")],fit:"Poor",hiringRecommendation:"Not Recommended",_error:e?.message}};
+      }
+    },1,(d,t)=>setProg({done:d,total:t,phase:"Scoring candidates..."}));
+
+    const sorted=[...scored].sort((a,b)=>(b.score?.totalScore||0)-(a.score?.totalScore||0));
+    const half=Math.ceil(sorted.length/2);
+
+    // Role suggestions for bottom 50% only (no interview questions)
+    setProg({done:0,total:sorted.length-half,phase:"Generating role suggestions..."});
+    const botR=await batch(sorted.slice(half),async(cand)=>{
+      try{return{...cand,suggestedRoles:await suggestR(cand,jdReqs)};}
+      catch{return{...cand,suggestedRoles:{suggestedRoles:[]}};}
+    },2,(d,t)=>setProg({done:d,total:t,phase:"Generating role suggestions..."}));
+
+    const final=[...sorted.slice(0,half),...botR];
+    setCandidates(final);
+    const scrn={id:"scr_"+Date.now(),jdTitle:jdReqs.jobTitle,jdReqs,formula,candidates:final,createdAt:new Date().toISOString(),status:"completed"};
+    try{await dbSave(scrn,user.id,user.email);await loadAll();}
+    catch(e){alert("⚠ Screening done but could not save:\n"+e.message);}
+    setLoading(false);setStep(5);
+  };
+
+  const ranked=[...candidates].sort((a,b)=>(b.score?.totalScore||0)-(a.score?.totalScore||0));
+  const half=Math.ceil(ranked.length/2);
+  const avgScore=ranked.length?Math.round(ranked.reduce((s,c)=>s+(c.score?.totalScore||0),0)/ranked.length):0;
+
+  if(authLoading) return <div style={{width:"100%",height:"100vh",display:"flex",alignItems:"center",justifyContent:"center",background:"var(--bg)"}}><div className="spinner" style={{width:32,height:32,border:"3px solid var(--border2)",borderTopColor:"var(--accent)"}}/></div>;
+  if(!user) return <AuthScreen onAuth={u=>setUser(u)}/>;
+
+  return(
+    <div style={{display:"flex",width:"100%",height:"100vh"}}>
+      {/* ── MODALS ── */}
+      {showNewModal&&<NewScreeningModal screenings={screenings} onFresh={handleFresh} onSelect={(s,w)=>{setShowNewModal(false);handlePrevSelect(s,w);}} onClose={()=>setShowNewModal(false)}/>}
+      {dupModal&&<DuplicateModal duplicates={dupModal.duplicates} onConfirm={dupModal.onConfirm} onClose={dupModal.onClose}/>}
+
+      {/* ── SIDEBAR ── */}
+      <div className="sidebar">
+        <div className="sidebar-top">
+          <div className="logo-mark">
+            <div className="logo-icon">T</div>
+            <div><div className="logo-name">TalentIQ</div><div className="logo-sub">Team Edition</div></div>
+          </div>
+        </div>
+        <div className="nav">
+          <div className="nav-sec">Workspace</div>
+          <div className={"nav-item"+(view==="dashboard"?" active":"")} onClick={()=>nav("dashboard")}><span className="nav-icon">⊞</span>Dashboard</div>
+          {view==="new"&&<div className="nav-item active"><span className="nav-icon">◎</span>Active Screening</div>}
+          <div className={"nav-item"+(view==="history"?" active":"")} onClick={()=>nav("history")}><span className="nav-icon">☰</span>All Screenings</div>
+          <div className={"nav-item"+(view==="team"?" active":"")} onClick={()=>nav("team")}><span className="nav-icon">⊙</span>Team Activity</div>
+          <div className="nav-sec">Account</div>
+          <div className={"nav-item"+(view==="settings"?" active":"")} onClick={()=>nav("settings")}><span className="nav-icon">⚙</span>Settings</div>
+        </div>
+        <button className="nav-new" onClick={handleNewScreening}>+ New Screening</button>
+        <div className="model-pill">
+          <div className="model-pill-name">GPT-4o-mini (OpenAI)</div>
+        </div>
+        <div className="user-panel">
+          <div className="u-avatar" style={{background:aColor(user.email)}}>{ini(user.email)}</div>
+          <div style={{flex:1,minWidth:0}}>
+            <div className="u-name">{user.user_metadata?.full_name||user.email.split("@")[0]}</div>
+            <div className="u-email">{user.email}</div>
+          </div>
+          <button className="logout-btn" onClick={logout} title="Sign out">⎋</button>
+        </div>
+      </div>
+
+      {/* ── MAIN ── */}
+      <div className="main">
+        <div className="topbar">
+          {view==="dashboard"&&<><div className="topbar-title">Dashboard</div><span className="topbar-sep">·</span><div className="topbar-sub">Team Overview</div></>}
+          {view==="new"&&<><div className="topbar-title">{jdReqs?jdReqs.jobTitle:"New Screening"}</div>{jdReqs&&<><span className="topbar-sep">·</span><div className="topbar-sub">Step {step}/5 · {jdReqs.domain}</div></>}</>}
+          {view==="history"&&<><div className="topbar-title">All Screenings</div><span className="topbar-sep">·</span><div className="topbar-sub">{screenings.length} total</div></>}
+          {view==="team"&&<><div className="topbar-title">Team Activity</div><span className="topbar-sep">·</span><div className="topbar-sub">Per-member breakdown</div></>}
+          {view==="settings"&&<><div className="topbar-title">Settings</div><span className="topbar-sep">·</span><div className="topbar-sub">Configuration</div></>}
+          <div style={{marginLeft:"auto",display:"flex",alignItems:"center",gap:8}}>
+            {view==="new"&&step===5&&<button className="btn btn-ghost btn-sm" onClick={()=>exportCSV(candidates,jdReqs?.jobTitle)}>↓ Export CSV</button>}
+            <button className="theme-toggle" onClick={toggleTheme}>
+              {theme==="light"?"🌙 Dark":"☀️ Light"}
+            </button>
+          </div>
+        </div>
+
+        <div className="content">
+
+          {/* ── DASHBOARD ── */}
+          {view === "dashboard" && (
+            <div className="fade-in">
+              <div className="stat-grid">
+                {[
+                  {icon:"📋",l:"Total Screenings",v:screenings.length,c:"var(--accent)",bg:"var(--accent-l)"},
+                  {icon:"👥",l:"Candidates Screened",v:screenings.reduce((s,x)=>s+(x.candidates?.length||0),0),c:"var(--purple)",bg:"var(--purple-l)"},
+                  {icon:"✅",l:"My Screenings",v:screenings.filter(x=>x.createdByEmail===user.email).length,c:"var(--green)",bg:"var(--green-l)"},
+                  {icon:"⭐",l:"Team Avg Score",v:(screenings.reduce((s,x)=>{const c=x.candidates?.filter(c=>c.score);return c?.length?s+c.reduce((ss,c)=>ss+(c.score?.totalScore||0),0)/c.length:s;},0)/Math.max(screenings.filter(x=>x.candidates?.some(c=>c.score)).length,1)||0).toFixed(0)+"/100",c:"var(--yellow)",bg:"var(--yellow-l)"}
+                ].map((s,i)=>(
+                  <div key={i} className="stat-card">
+                    <div className="stat-icon-wrap" style={{background:s.bg}}>
+                      <span>{s.icon}</span>
+                    </div>
+                    <div className="stat-num" style={{color:s.c}}>{s.v}</div>
+                    <div className="stat-label">{s.l}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+                <div className="sec-title" style={{margin:0}}>Recent Screenings</div>
+                {screenings.length>0 && (
+                  <button className="btn btn-ghost btn-sm" onClick={()=>nav("history")}>
+                    View all →
+                  </button>
+                )}
+              </div>
+
+              {loadingSc ? (
+                <div style={{textAlign:"center",padding:"40px",color:"var(--text3)"}}>
+                  Loading from database...
+                </div>
+              ) : screenings.length === 0 ? (
+                <div style={{textAlign:"center",padding:"50px 20px",color:"var(--text3)"}}>
+                  <div style={{fontSize:40,marginBottom:12}}>📋</div>
+                  <div style={{fontWeight:700,fontSize:15,color:"var(--text)",marginBottom:6}}>
+                    No screenings yet
+                  </div>
+                  <div style={{fontSize:13}}>
+                    Start a new screening — it will be visible to your whole team.
+                  </div>
+                  <button className="nav-new" onClick={handleNewScreening}>
+                    + New Screening
+                  </button>
+                </div>
+              ) : (
+                screenings.slice(0,4).map(s => (
+                  <SCard
+                    key={s.id}
+                    s={s}
+                    user={user}
+                    onClick={()=>{
+                      setCandidates(s.candidates||[]);
+                      setJdReqs(s.jdReqs);
+                      setFormula(s.formula);
+                      setFApproved(true);
+                      setStep(5);
+                      setView("new");
+                    }}
+                  />
+                ))
+              )}
+
+            </div>
+          )}
+
+          {/* ── ALL SCREENINGS ── */}
+          {view==="history"&&<div className="fade-in">
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12,flexWrap:"wrap",gap:8}}>
+              <div><div className="sec-title" style={{margin:0}}>All Team Screenings</div><div style={{fontSize:12,color:"var(--text3)",marginTop:2}}>Shared across all HR members · you can delete only your own</div></div>
+              <button className="btn btn-ghost btn-sm" onClick={loadAll} disabled={loadingSc}>{loadingSc?"↻ Loading...":"↻ Refresh"}</button>
+            </div>
+            {screenings.length>0&&<div style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:10,padding:"12px 14px",marginBottom:14}}>
+              <div style={{fontSize:10,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.8px",marginBottom:10}}>Download CSV Reports</div>
+              <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+                <button className="btn btn-outline btn-sm" onClick={()=>exportAllCSV(screenings)}>
+                  ↓ All Screenings Combined
+                </button>
+                <div style={{height:20,width:1,background:"var(--border)"}}/>
+                <span style={{fontSize:11,color:"var(--text3)",fontWeight:600}}>Per HR:</span>
+                {Array.from(new Set(screenings.map(x=>x.createdByEmail).filter(Boolean))).map(email=>(
+                  <button key={email} className="btn btn-ghost btn-sm" onClick={()=>exportByHRCSV(screenings,email)}>
+                    ↓ {email.split("@")[0]}{email===user.email?" (you)":""}
+                  </button>
+                ))}
+              </div>
+            </div>}
+            {loadingSc?<div style={{textAlign:"center",padding:"40px",color:"var(--text3)"}}>Loading...</div>:
+            screenings.length===0?<div style={{textAlign:"center",padding:"50px 20px",color:"var(--text3)"}}><div style={{fontSize:40,marginBottom:12}}>📁</div><div style={{fontWeight:700,fontSize:15,color:"var(--text)"}}>No screenings yet</div></div>:
+            screenings.map(s=><SCard key={s.id} s={s} user={user}
+              onClick={()=>{setCandidates(s.candidates||[]);setJdReqs(s.jdReqs);setFormula(s.formula);setFApproved(true);setStep(5);setView("new");}}
+              onExport={()=>exportCSV(s.candidates||[],s.jdTitle)}
+              onDelete={()=>handleDelete(s.id)}
+            />)}
+          </div>}
+
+          {/* ── TEAM ── */}
+          {view==="team"&&<div className="fade-in">
+            <div className="sec-title">Team Activity</div>
+            {Array.from(new Set(screenings.map(x=>x.createdByEmail).filter(Boolean))).map(email=>{
+              const mine=screenings.filter(s=>s.createdByEmail===email);
+              const tc=mine.reduce((s,x)=>s+(x.candidates?.length||0),0);
+              const avg=tc?Math.round(mine.reduce((s,x)=>s+(x.candidates||[]).reduce((ss,c)=>ss+(c.score?.totalScore||0),0),0)/tc):0;
+              return(
+                <div key={email} className="card" style={{marginBottom:14}}>
+                  <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:14}}>
+                    <div style={{width:38,height:38,borderRadius:10,background:aColor(email),color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,fontSize:13}}>{ini(email)}</div>
+                    <div style={{flex:1}}><div style={{fontWeight:700,fontSize:14,color:"var(--text)"}}>{email.split("@")[0]}</div><div style={{fontSize:11,color:"var(--text3)",fontFamily:"'DM Mono',monospace"}}>{email}</div></div>
+                    {email===user.email&&<span className="badge badge-green">You</span>}
+                  </div>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:14}}>
+                    {[{l:"Screenings",v:mine.length,c:"var(--accent)"},{l:"Candidates",v:tc,c:"var(--purple)"},{l:"Avg Score",v:avg+"/100",c:"var(--green)"}].map((st,i)=>(
+                      <div key={i} style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:9,padding:"12px 14px"}}>
+                        <div style={{fontSize:20,fontWeight:800,fontFamily:"'DM Mono',monospace",color:st.c}}>{st.v}</div>
+                        <div style={{fontSize:10,color:"var(--text3)",marginTop:3,fontWeight:600,textTransform:"uppercase",letterSpacing:"0.5px"}}>{st.l}</div>
+                      </div>
+                    ))}
+                  </div>
+                  {mine.map(s=>(
+                    <div key={s.id} style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:8,padding:"9px 12px",marginBottom:5,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center"}} onClick={()=>{setCandidates(s.candidates||[]);setJdReqs(s.jdReqs);setFormula(s.formula);setFApproved(true);setStep(5);setView("new");}}>
+                      <div><div style={{fontWeight:600,fontSize:13,color:"var(--text)"}}>{s.jdTitle}</div><div style={{fontSize:10,color:"var(--text3)",fontFamily:"'DM Mono',monospace",marginTop:1}}>{new Date(s.createdAt).toLocaleDateString()} · {s.candidates?.length||0} candidates</div></div>
+                      <span className="badge badge-blue" style={{fontSize:9}}>{s.jdReqs?.domain}</span>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+            {screenings.length===0&&<div style={{textAlign:"center",padding:"50px 20px",color:"var(--text3)"}}><div style={{fontSize:40,marginBottom:12}}>👥</div><div style={{fontWeight:700,fontSize:15,color:"var(--text)"}}>No activity yet</div></div>}
+          </div>}
+
+          {/* ── SETTINGS ── */}
+          {view==="settings"&&<div className="fade-in" style={{maxWidth:560}}>
+            <div className="sec-title">Settings</div>
+            <div className="card" style={{marginBottom:14}}>
+              <div className="card-hdr"><div className="card-title">AI Models — Dual Setup</div></div>
+              <div style={{display:"flex",alignItems:"center",gap:12,paddingBottom:10}}>
+                <div style={{width:36,height:36,borderRadius:9,background:"var(--green-l)",border:"1px solid var(--green-m)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>🦙</div>
+                <div>
+                  <div style={{fontWeight:700,fontSize:14,fontFamily:"'DM Mono',monospace",color:"var(--text)"}}>llama-3.3-70b-versatile</div>
+                  <div style={{fontSize:12,color:"var(--text2)",marginTop:2}}>Meta Llama 3.3 70B via Groq · <span style={{color:"var(--green)",fontWeight:700}}>100% Free</span></div>
+                </div>
+                <span className="badge badge-green" style={{marginLeft:"auto"}}>Active</span>
+              </div>
+              <div className="success-box" style={{fontSize:12}}>Free limits: <strong>100,000 tokens/day · 30 req/min</strong> · 1 min gap between resumes prevents rate limit errors.</div>
+            </div>
+            <div className="card" style={{marginBottom:14}}>
+              <div className="card-hdr"><div className="card-title">Appearance</div></div>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"4px 0"}}>
+                <div><div style={{fontWeight:600,fontSize:14,color:"var(--text)"}}>Theme</div><div style={{fontSize:12,color:"var(--text2)",marginTop:2}}>Currently: {theme==="light"?"Light mode":"Dark mode"}</div></div>
+                <button className="theme-toggle" onClick={toggleTheme} style={{padding:"8px 16px",fontSize:13}}>{theme==="light"?"Switch to Dark 🌙":"Switch to Light ☀️"}</button>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-hdr"><div className="card-title">Account</div></div>
+              <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:14}}>
+                <div style={{width:36,height:36,borderRadius:9,background:aColor(user.email),color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:700,fontSize:13}}>{ini(user.email)}</div>
+                <div><div style={{fontWeight:700,color:"var(--text)"}}>{user.user_metadata?.full_name||user.email.split("@")[0]}</div><div style={{fontSize:12,color:"var(--text3)",fontFamily:"'DM Mono',monospace"}}>{user.email}</div></div>
+              </div>
+              <button className="btn btn-danger btn-sm" onClick={logout}>Sign Out</button>
+            </div>
+          </div>}
+
+          {/* ── NEW SCREENING ── */}
+          {view==="new"&&<div className="fade-in">
+            <StepBar step={step}/>
+
+            {/* STEP 1 — JD */}
+            {step===1 && ( <div style={{display:"grid",gap:16,maxWidth:700}}>
+              <div className="card">
+                <div className="card-hdr"><div className="card-title">Job Description</div></div>
+                <div style={{display:"flex",gap:6,marginBottom:16}}>
+                  {["file","paste"].map(m=><button key={m} className={"mode-tab"+(jdMode===m?" active":"")} onClick={()=>setJdMode(m)}>{m==="file"?"📎 Upload File (PDF / DOCX)":"✏️ Paste Text"}</button>)}
+                </div>
+                {jdMode==="file"&&(!jdFile?(
+                  <div className={"drop-zone"+(dragging?" drag-over":"")} onClick={()=>jdFileRef.current?.click()} onDragOver={e=>{e.preventDefault();setDragging(true);}} onDragLeave={()=>setDragging(false)} onDrop={e=>{e.preventDefault();setDragging(false);if(e.dataTransfer.files[0])handleJdFile(e.dataTransfer.files[0]);}}>
+                    <div style={{fontSize:28,marginBottom:8}}>📄</div>
+                    <div style={{fontWeight:600,fontSize:14,marginBottom:4,color:"var(--text)"}}>Drop JD file here or click to browse</div>
+                    <div style={{fontSize:12,color:"var(--text3)"}}>PDF, DOCX, DOC, TXT supported</div>
+                    <input ref={jdFileRef} type="file" accept=".pdf,.docx,.doc,.txt" style={{display:"none"}} onChange={e=>e.target.files[0]&&handleJdFile(e.target.files[0])}/>
+                  </div>
+                ):(
+                  <div style={{background:"var(--surface)",border:"1px solid var(--border)",borderRadius:9,padding:"12px 14px"}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+                      <div style={{fontWeight:600,fontSize:14,display:"flex",alignItems:"center",gap:7}}>{jdFile.name.endsWith(".pdf")?"📕":"📝"} {jdFile.name}</div>
+                      <button className="btn btn-danger btn-xs" onClick={()=>{setJdFile(null);setJdText("");}}>Remove</button>
+                    </div>
+                    <div style={{fontSize:11,color:"var(--text3)",fontFamily:"'DM Mono',monospace"}}>{(jdFile.size/1024).toFixed(0)} KB</div>
+                    {jdExtracting&&<div style={{color:"var(--accent)",fontSize:12,marginTop:6,display:"flex",alignItems:"center",gap:6}}><div className="spinner" style={{width:12,height:12,border:"2px solid var(--accent-m)",borderTopColor:"var(--accent)"}}/> Extracting text...</div>}
+                    {jdText&&!jdExtracting&&<div style={{color:"var(--green)",fontSize:12,marginTop:6,fontWeight:600}}>✓ {jdText.length.toLocaleString()} characters extracted</div>}
+                  </div>
+                ))}
+                {jdMode==="paste"&&<textarea className="input textarea" placeholder="Paste the complete job description here..." value={jdText} onChange={e=>setJdText(e.target.value)}/>}
+                <div style={{marginTop:14,display:"flex",gap:8,alignItems:"center"}}>
+                  <button className="btn btn-primary" onClick={handleAnalyzeJD} disabled={!jdText.trim()||loading||jdExtracting}>{loading?"Analyzing...":"Analyze JD with AI →"}</button>
+                  {loading&&<span style={{fontSize:12,color:"var(--text3)",fontFamily:"'DM Mono',monospace"}}>{loadMsg}</span>}
+                </div>
+              </div>
+              {jdReqs&&<div className="card fade-in">
+                <div className="card-hdr"><div className="card-title">Extracted Requirements</div><span className="badge badge-green" style={{fontSize:10}}>AI Analysis Complete</span></div>
+                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginBottom:14}}>
+                  {[{l:"Role",v:<span style={{fontWeight:700,fontSize:14,color:"var(--text)"}}>{jdReqs.jobTitle}</span>},{l:"Domain",v:<span className="badge badge-blue">{jdReqs.domain}</span>},{l:"Experience",v:<span style={{fontFamily:"'DM Mono',monospace",color:"var(--accent)",fontWeight:700,fontSize:14}}>{jdReqs.experienceRange?.min}–{jdReqs.experienceRange?.max} yrs</span>},{l:"Seniority",v:<span className="badge badge-purple">{jdReqs.seniority}</span>},{l:"Company",v:<span style={{fontSize:13,color:"var(--text)"}}>{jdReqs.company||"—"}</span>},{l:"Employment",v:<span className="badge badge-gray">{jdReqs.employmentType||"Full-time"}</span>}].map((it,i)=>(
+                    <div key={i}><div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:5}}>{it.l}</div>{it.v}</div>
+                  ))}
+                </div>
+                {jdReqs.summary&&<div className="info-box" style={{marginBottom:12,fontSize:13}}>{jdReqs.summary}</div>}
+                {[{l:"Required Skills",items:jdReqs.requiredSkills||[],cls:"badge-green"},{l:"Preferred Skills",items:jdReqs.preferredSkills||[],cls:"badge-yellow"},{l:"Tech Stack",items:jdReqs.techStack||[],cls:"badge-purple"}].filter(g=>g.items.length>0).map((g,i)=>(
+                  <div key={i} style={{marginBottom:12}}>
+                    <div style={{fontSize:9,color:"var(--text3)",fontWeight:700,textTransform:"uppercase",letterSpacing:"0.5px",marginBottom:6}}>{g.l}</div>
+                    <div style={{display:"flex",flexWrap:"wrap",gap:4}}>{g.items.map((s,j)=><span key={j} className={"badge "+g.cls} style={{fontSize:11}}>{s}</span>)}</div>
+                  </div>
+                ))}
+                <button className="btn btn-primary" onClick={()=>setStep(2)}>Continue → Upload Resumes</button>
+              </div>}
+            </div>)}
+
+            {/* STEP 2 — Resumes */}
+            {step===2&&<div style={{maxWidth:640}}>
+              <div className="card">
+                <div className="card-hdr"><div className="card-title">Upload Candidate Resumes</div><span className="badge badge-gray">{resumeFiles.length}/30 files</span></div>
+                <div className={"drop-zone"+(dragging?" drag-over":"")} onClick={()=>resumeRef.current?.click()} onDragOver={e=>{e.preventDefault();setDragging(true);}} onDragLeave={()=>setDragging(false)} onDrop={e=>{e.preventDefault();setDragging(false);handleResumeFiles(e.dataTransfer.files);}}>
+                  <div style={{fontSize:28,marginBottom:8}}>📄</div>
+                  <div style={{fontWeight:600,fontSize:14,marginBottom:4,color:"var(--text)"}}>Drop resumes here or click to browse</div>
+                  <div style={{fontSize:12,color:"var(--text3)"}}>PDF, DOCX, TXT · Max 30 files · Duplicates will be detected</div>
+                  <input ref={resumeRef} type="file" multiple accept=".pdf,.txt,.doc,.docx" style={{display:"none"}} onChange={e=>handleResumeFiles(e.target.files)}/>
+                </div>
+                {resumeFiles.length>0&&<div style={{marginTop:12}}>
+                  <div style={{maxHeight:180,overflowY:"auto",display:"grid",gap:4}}>
+                    {resumeFiles.map((f,i)=>(
+                      <div key={i} className="file-item">
+                        <span style={{fontFamily:"'DM Mono',monospace",fontSize:11,color:"var(--text2)"}}>{f.name.endsWith(".pdf")?"📕":"📝"} {f.name}</span>
+                        <div style={{display:"flex",gap:8,alignItems:"center"}}>
+                          <span style={{fontSize:10,color:"var(--text3)"}}>{(f.size/1024).toFixed(0)} KB</span>
+                          <button style={{background:"none",border:"none",color:"var(--text3)",cursor:"pointer",fontSize:13}} onClick={()=>setResumeFiles(p=>p.filter((_,j)=>j!==i))}>✕</button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>}
+                {loading&&<div style={{marginTop:12}}>
+                  <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"var(--text3)",fontFamily:"'DM Mono',monospace",marginBottom:6}}><span>{prog.phase}</span><span>{prog.done}/{prog.total}</span></div>
+                  <div className="prog-track"><div className="prog-fill" style={{width:(prog.total?Math.round((prog.done/prog.total)*100):0)+"%"}}/></div>
+                </div>}
+                <div style={{marginTop:16,display:"flex",gap:8,alignItems:"center",flexWrap:"wrap"}}>
+                  <button className="btn btn-ghost btn-sm" onClick={()=>setStep(1)}>← Back</button>
+                  <button className="btn btn-primary" onClick={()=>{
+                    handleParseResumes();
+                  }} disabled={!resumeFiles.length||loading}>{loading?"Processing...":"Parse & Check Duplicates →"}</button>
+                </div>
+              </div>
+            </div>}
+
+            {/* STEP 3 — Formula Chat */}
+            {step===3&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,height:"calc(100vh - 186px)"}}>
+              <div style={{display:"flex",flexDirection:"column",gap:10,overflow:"hidden"}}>
+                <div className="card" style={{padding:12,flexShrink:0}}>
+                  <div style={{fontSize:9,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.8px",marginBottom:7}}>Parsed — {candidates.length} Candidates</div>
+                  <div style={{maxHeight:150,overflowY:"auto",display:"grid",gap:3}}>
+                    {candidates.map((c,i)=>(
+                      <div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",background:"var(--surface)",padding:"6px 10px",borderRadius:7}}>
+                        <div style={{display:"flex",alignItems:"center",gap:6}}>
+                          <span style={{fontWeight:600,fontSize:12,color:"var(--text)"}}>{c.parsedData?.name||c.fileName}</span>
+                          {c.duplicateFiles?.length>0&&<span title={"Duplicate of: "+c.duplicateFiles.join(", ")} className="badge badge-yellow" style={{fontSize:8,cursor:"help"}}>+{c.duplicateFiles.length} dup</span>}
+                        </div>
+                        <div style={{display:"flex",gap:3}}>
+                          <span className="badge badge-blue" style={{fontSize:8,padding:"1px 5px"}}>{(c.parsedData?.inferredDomain||"?").split(" ").slice(0,2).join(" ")}</span>
+                          <span className="badge badge-gray" style={{fontSize:8,padding:"1px 5px"}}>{c.parsedData?.totalExperience||0}yr</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {formula&&!fApproved&&<button className="btn btn-success" style={{flexShrink:0}} onClick={approveFormula}>✓ Approve Formula & Start Scoring</button>}
+                {formula&&<div style={{overflowY:"auto",flex:1}}><FormulaCard formula={formula}/></div>}
+                {!formula&&<div className="info-box" style={{fontSize:12}}>💬 Tell me your scoring priorities in the chat. I'll remember everything you say across messages.</div>}
+              </div>
+              <div style={{display:"flex",flexDirection:"column",gap:10}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                  <div style={{fontSize:10,fontWeight:700,color:"var(--text3)",textTransform:"uppercase",letterSpacing:"0.8px"}}>Formula Designer · Chat with Memory</div>
+                  <span className="badge badge-gray" style={{fontSize:9}}>{chatHistory.filter(m=>m.role==="user").length} messages remembered</span>
+                </div>
+                <div className="chat-wrap" style={{flex:1}}>
+                  <div className="chat-msgs" ref={chatRef}>
+                    {chatDisplay.map((m,i)=><div key={i} className={"chat-msg "+m.role}>{m.content}</div>)}
+                    {loading&&<div className="chat-msg assistant-typing"><div className="spinner" style={{width:12,height:12,border:"2px solid var(--border2)",borderTopColor:"var(--accent)",flexShrink:0}}/>{loadMsg||"Thinking with full memory..."}</div>}
+                  </div>
+                  {!fApproved&&<div className="chat-row">
+                    <input className="chat-input" placeholder='e.g. "keep projects and skills at same highest priority"' value={chatInput} onChange={e=>setChatInput(e.target.value)} onKeyDown={e=>e.key==="Enter"&&!e.shiftKey&&sendChat()}/>
+                    <button className="btn btn-primary btn-sm" onClick={sendChat} disabled={loading||!chatInput.trim()}>Send</button>
+                  </div>}
+                </div>
+              </div>
+            </div>}
+
+            {/* STEP 4 — Processing */}
+            {step===4&&<div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:360,gap:24}}>
+              <div className="spinner" style={{width:52,height:52,border:"3px solid var(--border2)",borderTopColor:"var(--accent)"}}/>
+              <div style={{textAlign:"center"}}>
+                <div style={{fontSize:16,fontWeight:700,color:"var(--text)",marginBottom:6}}>{prog.phase||"Processing..."}</div>
+                <div style={{fontSize:12,color:"var(--text3)",fontFamily:"'DM Mono',monospace",marginBottom:14}}>{prog.done} / {prog.total} completed</div>
+                <div style={{width:340,margin:"0 auto"}} className="prog-track"><div className="prog-fill" style={{width:(prog.total?Math.round((prog.done/prog.total)*100):0)+"%"}}/></div>
+                <div style={{fontSize:12,color:"var(--accent)",fontFamily:"'DM Mono',monospace",marginTop:8,fontWeight:600}}>{prog.total?Math.round((prog.done/prog.total)*100):0}%</div>
+              </div>
+              <div className="info-box" style={{maxWidth:400,textAlign:"center",fontSize:13}}>Scoring all candidates · Interview questions for top 50% · Role suggestions for remaining 50%</div>
+            </div>}
+
+            {/* STEP 5 — Results */}
+            {step===5&&<div className="fade-in">
+              <div className="stat-grid" style={{marginBottom:18}}>
+                {[{icon:"👤",l:"Total Candidates",v:ranked.length,c:"var(--accent)",bg:"var(--accent-l)"},{icon:"📊",l:"Average Score",v:avgScore+"/100",c:"var(--green)",bg:"var(--green-l)"},{icon:"⭐",l:"Top 50%",v:half,c:"var(--green)",bg:"var(--green-l)"},{icon:"💼",l:"Bottom 50%",v:ranked.length-half,c:"var(--text3)",bg:"var(--surface)"}].map((s,i)=>(
+                  <div key={i} className="stat-card"><div className="stat-icon-wrap" style={{background:s.bg}}><span>{s.icon}</span></div><div className="stat-num" style={{color:s.c,fontSize:22}}>{s.v}</div><div className="stat-label">{s.l}</div></div>
+                ))}
+              </div>
+              <div className="card" style={{padding:0,overflow:"hidden"}}>
+                <div style={{padding:"12px 16px",borderBottom:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center",background:"var(--surface)"}}>
+                  <div><span style={{fontWeight:700,fontSize:13,color:"var(--text)"}}>Candidate Rankings</span><span style={{fontSize:11,color:"var(--text3)",marginLeft:8}}>click row to expand details</span></div>
+                  <div style={{display:"flex",gap:6}}>
+                    <span className="badge badge-green" style={{fontSize:9}}>⭐ Top 50% → LinkedIn &amp; Notes</span>
+                    <span className="badge badge-gray" style={{fontSize:9}}>Bottom 50% → Role Suggestions</span>
+                  </div>
+                </div>
+                <div style={{overflowX:"auto"}}>
+                  <table className="c-table">
+                    <thead><tr><th>#</th><th>Candidate</th><th>Contact</th><th>Domain</th><th>Exp</th><th>Score</th><th>Fit</th><th>Recommendation</th><th>Tier</th></tr></thead>
+                    <tbody>
+                      {ranked.map((c,i)=>{
+                        const isTop=i<half; const isSel=selCand?.id===c.id;
+                        return(<React.Fragment key={c.id}>
+                          <tr className={isSel?"expanded":""} onClick={()=>{setSelCand(isSel?null:c);setCandTab("bd");}}>
+                            <td style={{fontFamily:"'DM Mono',monospace",color:"var(--text3)",fontSize:11,fontWeight:600,width:34}}>{i+1}</td>
+                            <td style={{fontWeight:600}}>
+                              <div style={{display:"flex",alignItems:"center",gap:6}}>
+                                <span>{c.parsedData?.name||c.fileName}</span>
+                                {c.duplicateFiles?.length>0&&<span title={"Also submitted as:\n"+c.duplicateFiles.join("\n")} className="badge badge-yellow" style={{fontSize:9,cursor:"help"}}>📋 +{c.duplicateFiles.length} dup</span>}
+                                {c.parsedData?._parseWarning&&<span title={c.parsedData._parseWarning} className="badge badge-yellow" style={{fontSize:9,cursor:"help"}}>⚠ partial</span>}
+                              </div>
+                            </td>
+                            <td style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:"var(--text3)"}}><div>{c.parsedData?.email||"—"}</div><div style={{marginTop:2}}>{c.parsedData?.phone||"—"}</div></td>
+                            <td><span className="badge badge-blue" style={{fontSize:9}}>{(c.parsedData?.inferredDomain||"—").split(" ").slice(0,3).join(" ")}</span></td>
+                            <td style={{fontFamily:"'DM Mono',monospace",fontSize:12,fontWeight:600}}>{c.parsedData?.totalExperience||0}yr</td>
+                            <td><span className={"score-badge "+sc(c.score?.totalScore||0)}>{c.score?.totalScore||0}</span></td>
+                            <td><span className={"badge "+fc(c.score?.fit)} style={{fontSize:10}}>{c.score?.fit||"—"}</span></td>
+                            <td style={{fontSize:11,color:"var(--text2)",maxWidth:150}}>{c.score?.hiringRecommendation||"—"}</td>
+                            <td>{isTop?<span className="tier-top">⭐ Top 50%</span>:<span className="tier-bot">Bottom 50%</span>}</td>
+                          </tr>
+                          {isSel&&<tr><td colSpan={9} style={{padding:"4px 12px 12px",background:"var(--accent-l)"}}><CandPanel cand={c} tab={candTab} setTab={setCandTab} isTop={isTop} onUpdate={(updated)=>{setCandidates(prev=>prev.map(x=>x.id===updated.id?updated:x));setSelCand(updated);}}/></td></tr>}
+                        </React.Fragment>);
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>}
+          </div>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+class ErrorBoundary extends React.Component{
+  constructor(p){super(p);this.state={error:null};}
+  static getDerivedStateFromError(e){return{error:e};}
+  render(){
+    if(this.state.error){
+      return(
+        <div style={{padding:40,fontFamily:"Manrope,sans-serif",maxWidth:600,margin:"40px auto"}}>
+          <div style={{fontSize:20,fontWeight:700,color:"#E0382A",marginBottom:12}}>TalentIQ failed to start</div>
+          <div style={{fontSize:13,color:"#4B5563",background:"#FEF0EF",border:"1px solid #E0382A",borderRadius:8,padding:14,fontFamily:"monospace",whiteSpace:"pre-wrap"}}>
+            {this.state.error.toString()}
+          </div>
+          <div style={{fontSize:12,color:"#6B7280",marginTop:12}}>
+            Open browser DevTools (F12) → Console tab for more details.
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<ErrorBoundary><App/></ErrorBoundary>);
+</script>
+</body>
+</html>
