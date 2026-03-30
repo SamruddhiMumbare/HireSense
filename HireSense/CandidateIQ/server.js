@@ -17,7 +17,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
   "https://qdvdjtvscojzamaqteyq.supabase.co",
-  "sb_publishable_-bLmVv7f2_FFdStXxsLkgQ_wB2Ulxp-" // keep simple (no service role needed for now)
+  "sb_publishable_-bLmVv7f2_FFdStXxsLkgQ_wB2Ulxp-"
 );
 
 app.post("/chat", async (req, res) => {
